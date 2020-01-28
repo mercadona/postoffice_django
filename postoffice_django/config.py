@@ -29,7 +29,8 @@ def _create_publishers(consumer):
         'topic': consumer.get('topic'),
         'endpoint': consumer.get('endpoint'),
         'type': consumer.get('type'),
-        'initial_message': 0
+        'initial_message': 0,
+        'from_now': True
     }
 
     response = requests.post(url, json=payload)
