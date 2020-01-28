@@ -31,13 +31,13 @@ To can install our application, you can run:
 
 .. code-block:: bash
 
-   $ pip install git+https://github.com/jjponz/postoffice_django.git
+   $ pip install git+https://github.com/mercadona/postoffice_django.git
 
 or add
 
 .. code-block:: txt
 
-   git+https://github.com/jjponz/postoffice_django.git
+   git+https://github.com/mercadona/postoffice_django.git
 
 to your requirements file
 
