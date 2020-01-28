@@ -4,13 +4,13 @@ Post office django client
 
 What is post office django
 ==========================
-`postoffice_django` is a django app to communicate with `postoffice` server
+`postoffice_django` is a django app to communicate with [postoffice](https://github.com/lonamiaec/postoffice/).
 
 Features
 ========
 - Set up server via django command `configure_post_office`
     - Create necessary `topics` on `postoffice` server
-    - Create necessary `publishers` on `postoffice server` 
+    - Create necessary `publishers` on `postoffice server`
 - Send messages in a easy way to `post office server`
 
 How to install it
@@ -18,16 +18,16 @@ How to install it
 
 Prerequisites
 -------------
-To can run the application, you must have
+To be able to run the application, you must have
 
 - django
 - requests
 
-Obviously, you need a properly django project run and up
+Obviously, you need a django project up and running
 
 Installing postoffice_django
 ----------------------------
-To can install our application, you can run:
+At the moment there are two ways to install the app:
 
 .. code-block:: bash
 
@@ -41,7 +41,7 @@ or add
 
 to your requirements file
 
-After install the app, you need set `POST_OFFICE_URL`, `POST_OFFICE_CONSUMERS` and `POST_OFFICE_TIMEOUT` in your django settings file
+Once installed, you need to set `POST_OFFICE_URL`, `POST_OFFICE_CONSUMERS` and `POST_OFFICE_TIMEOUT` in your django settings file.
 
 :POST_OFFICE_URL:
    Is the `url` where server is hosted.
@@ -52,7 +52,7 @@ After install the app, you need set `POST_OFFICE_URL`, `POST_OFFICE_CONSUMERS` a
 
 
 :POST_OFFICE_CONSUMERS:
-    Are the consumers which must been configured as publishers in postoffice server. With that, we create the necessary topics and publishers on postoffice 
+    Are the consumers which must been configured as publishers in postoffice server. With that, we create the necessary topics and publishers on postoffice
 
     .. code-block:: python
 
@@ -75,30 +75,28 @@ After install the app, you need set `POST_OFFICE_URL`, `POST_OFFICE_CONSUMERS` a
 
     :type:
        http/pubsub
-           
+
 
 :POST_OFFICE_TIMEOUT:
-   When requests raises a timeout. If you don't set this constant, by default is 0.5
+   Specific timeout to use on every communication with `postoffice`. If not specified the default value is 0.5 seconds.
 
 
 How to setup postoffice via django command
 ==========================================
-Once you installed and set the required variables in django settings, you can create the necessary structure of `topics` and `publishers` on postoffice server using a django command
+Now we ready to start sending messages to `postoffice`. But first, we must generate `topics` and `publishers` on postoffice. There is a django command to help on this
 
 .. code-block:: bash
 
    $ ./manage.py configure_post_office
 
 
-Send messages to postoffice
+Sending messages to postoffice
 ============================
-To send message to postoffice, we have the
+We have the `publish` method from the `publishing` module
 
 .. code-block:: python
 
    publish(topic, message, **attributes)
-
-method from `publishing` module.
 
 :topic:
    Topic name. This topic **must** exists to postoffice can manage the message
@@ -109,7 +107,7 @@ method from `publishing` module.
 :attributes:
    Additional attributes to the message
 
-An example of use:
+An example:
 
 .. code-block:: python
 
@@ -118,7 +116,7 @@ An example of use:
    message = {'key': 'value'}
    publishing.publish('some_topic', message)
 
-or if we need send message attributes
+we can also send extra attributes (those attributes will be headers on http requests or extra information on gcloud pubsub)
 
 .. code-block:: python
 
@@ -128,7 +126,7 @@ or if we need send message attributes
    publishing.publish('some_topic', message, some_attribute=1, name='example')
 
 
-The method sends the message to postoffice using this payload:
+The generated payload sent to postoffice looks like follows:
 
 :without attributes:
 
@@ -156,8 +154,8 @@ The method sends the message to postoffice using this payload:
           }
         }
 
+In case communication with postoffice fails, we save those undelivered messages locally with all the related information
 
-In case that we can't send the message to the server, we has an admin view to see the errors. The information stored is:
 
 :Topic:
   The addresses topic for the message sent
@@ -166,4 +164,4 @@ In case that we can't send the message to the server, we has an admin view to se
 :Attributes:
   Attributes of the message sent
 :Errors:
-  Errors that postoffice reports 
+  Errors that postoffice reports
