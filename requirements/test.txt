@@ -1,0 +1,11 @@
+-r base.txt
+
+flake8>=2.1.0
+pytest>=4.6.0
+coverage>=4.4.0
+pytest-cov>=2.7.0
+pytest-django==3.8.0
+codecov>=2.0.0
+pytest-sugar==0.9.2
+responses==0.10.9
+pytest-responses==0.4.0
