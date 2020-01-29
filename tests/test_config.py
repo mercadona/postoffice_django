@@ -4,47 +4,32 @@ import os
 import pytest
 import responses
 
+from django.conf import settings
+
 from postoffice_django.config import configure
 
-POST_OFFICE_URL = os.environ.get('POST_OFFICE_URL', 'http://post_office_url')
+POSTOFFICE_URL = settings.POSTOFFICE_URL
 
 
 @pytest.mark.django_db
 class TestConfig:
-    POST_OFFICE_TOPIC_CREATION_URL = f'{POST_OFFICE_URL}/api/topics/'
-    POST_OFFICE_PUBLISHER_CREATION_URL = f'{POST_OFFICE_URL}/api/publishers/'
+    POSTOFFICE_TOPIC_CREATION_URL = f'{POSTOFFICE_URL}/api/topics/'
+    POSTOFFICE_PUBLISHER_CREATION_URL = f'{POSTOFFICE_URL}/api/publishers/'
 
-    @pytest.fixture
-    def consumers(self):
-        return [
-            {
-                'topic': 'some_topic',
-                'endpoint': 'http://www.some_url.com',
-                'type': 'http'
-            },
-            {
-                'topic': 'another_topic',
-                'endpoint': 'http://www.another_url.com',
-                'type': 'http'
-            }
-        ]
-
-    def test_create_topics_and_publishers(self, settings, consumers):
-        settings.POST_OFFICE_CONSUMERS = consumers
-        responses.add(responses.POST, self.POST_OFFICE_TOPIC_CREATION_URL, status=201,
+    def test_create_topics_and_publishers(self, settings):
+        responses.add(responses.POST, self.POSTOFFICE_TOPIC_CREATION_URL, status=201,
                       body="", content_type='application/json')
-        responses.add(responses.POST, self.POST_OFFICE_PUBLISHER_CREATION_URL, status=201,
+        responses.add(responses.POST, self.POSTOFFICE_PUBLISHER_CREATION_URL, status=201,
                       body="", content_type='application/json')
 
         configure()
 
         assert len(responses.calls) == 4
 
-    def test_request_body_sent_to_create_topic(self, settings, consumers):
-        settings.POST_OFFICE_CONSUMERS = consumers
-        responses.add(responses.POST, self.POST_OFFICE_TOPIC_CREATION_URL, status=201,
+    def test_request_body_sent_to_create_topic(self, settings):
+        responses.add(responses.POST, self.POSTOFFICE_TOPIC_CREATION_URL, status=201,
                       body="", content_type='application/json')
-        responses.add(responses.POST, self.POST_OFFICE_PUBLISHER_CREATION_URL, status=201,
+        responses.add(responses.POST, self.POSTOFFICE_PUBLISHER_CREATION_URL, status=201,
                       body="", content_type='application/json')
 
         configure()
@@ -56,11 +41,10 @@ class TestConfig:
             'name': 'another_topic'
         }
 
-    def test_request_body_sent_to_create_publishers(self, settings, consumers):
-        settings.POST_OFFICE_CONSUMERS = consumers
-        responses.add(responses.POST, self.POST_OFFICE_TOPIC_CREATION_URL, status=201,
+    def test_request_body_sent_to_create_publishers(self, settings):
+        responses.add(responses.POST, self.POSTOFFICE_TOPIC_CREATION_URL, status=201,
                       body="", content_type='application/json')
-        responses.add(responses.POST, self.POST_OFFICE_PUBLISHER_CREATION_URL, status=201,
+        responses.add(responses.POST, self.POSTOFFICE_PUBLISHER_CREATION_URL, status=201,
                       body="", content_type='application/json')
 
         configure()
