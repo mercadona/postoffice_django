@@ -28,5 +28,6 @@ def get_timeout() -> Decimal:
     try:
         return settings.POSTOFFICE_TIMEOUT
     except AttributeError:
-        logger.info(f'Timeout not defined, using default value: {DEFAULT_TIMEOUT} (s)')
+        logger.info(
+            f'Timeout not defined, using default value: {DEFAULT_TIMEOUT} (s)')
         return DEFAULT_TIMEOUT
