@@ -41,22 +41,22 @@ or add
 
 to your requirements file
 
-Once installed, you need to set `POST_OFFICE_URL`, `POST_OFFICE_CONSUMERS` and `POST_OFFICE_TIMEOUT` in your django settings file.
+Once installed, you need to set `POSTOFFICE_URL`, `POSTOFFICE_CONSUMERS` and `POSTOFFICE_TIMEOUT` in your django settings file.
 
-:POST_OFFICE_URL:
+:POSTOFFICE_URL:
    Is the `url` where server is hosted.
 
    .. code-block:: python
 
-      POST_OFFICE_URL = 'http://some_site.org/
+      POSTOFFICE_URL = 'http://some_site.org/
 
 
-:POST_OFFICE_CONSUMERS:
+:POSTOFFICE_CONSUMERS:
     Are the consumers which must been configured as publishers in postoffice server. With that, we create the necessary topics and publishers on postoffice
 
     .. code-block:: python
 
-       POST_OFFICE_CONSUMERS = [{
+       POSTOFFICE_CONSUMERS = [{
            'topic': 'some_topic',
            'endpoint': 'http://www.some_url.com',
            'type': 'http',
@@ -77,7 +77,7 @@ Once installed, you need to set `POST_OFFICE_URL`, `POST_OFFICE_CONSUMERS` and `
        http/pubsub
 
 
-:POST_OFFICE_TIMEOUT:
+:POSTOFFICE_TIMEOUT:
    Specific timeout to use on every communication with `postoffice`. If not specified the default value is 0.5 seconds.
 
 

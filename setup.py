@@ -10,20 +10,15 @@ os.chdir(os.path.normpath(os.path.join(os.path.abspath(__file__), os.pardir)))
 
 setup(
     name = 'postoffice_django',
-    version = '0.1',
-    description = 'Postoffice django client',
-    long_description = README,
-    author = 'MercadonaTech',
-    author_email = 'software.online@mercadona.es',
-    url = 'http://github.com/mercadona/postoffice_django',
+    version = '0.1.0',
     packages=find_packages(exclude=("tests",)),
     include_package_data = True,
-    install_requires=[
-        'django',
-        'requests'
-    ]
-    license='Apache Software License 2.0',
-    keywords='postoffice'
+    license = 'APACHE License',
+    description = 'A simple Django app to comunicate with post office',
+    long_description = README,
+    url = 'http://www.example.com/',
+    author = 'Your Name',
+    author_email = 'yourname@example.com',
     classifiers = [
         'Environment :: Web Environment',
         'Framework :: Django :: 2.0',
