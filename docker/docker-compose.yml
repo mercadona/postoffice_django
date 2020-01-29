@@ -1,0 +1,11 @@
+version: '3'
+services:
+  db:
+    image: postgres:12.1
+    container_name: postoffice_django_db
+    environment:
+      - POSTGRES_PASSWORD=postoffice_django
+      - POSTGRES_USER=postoffice_django
+      - POSTGRES_DB=postoffice_django
+    ports:
+      - "6543:5432"
