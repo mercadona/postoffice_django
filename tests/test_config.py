@@ -51,14 +51,14 @@ class TestConfig:
 
         assert json.loads(responses.calls[1].request.body) == {
             'active': True,
-            'endpoint': 'http://www.some_url.com',
+            'target': 'http://www.some_url.com',
             'topic': 'some_topic',
             'type': 'http',
             'from_now': True
         }
         assert json.loads(responses.calls[3].request.body) == {
             'active': True,
-            'endpoint': 'http://www.another_url.com',
+            'target': 'http://www.another_url.com',
             'topic': 'another_topic',
             'type': 'pubsub',
             'from_now': True

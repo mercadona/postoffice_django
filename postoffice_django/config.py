@@ -27,7 +27,7 @@ def _create_publishers(consumer):
     payload = {
         'active': True,
         'topic': consumer.get('topic'),
-        'endpoint': consumer.get('endpoint'),
+        'target': consumer.get('target'),
         'type': consumer.get('type'),
         'from_now': True
     }

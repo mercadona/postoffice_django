@@ -30,15 +30,16 @@ AUTHENTICATION_BACKENDS = (
 POSTOFFICE_URL = 'http://fake.service'
 POSTOFFICE_CONSUMERS = [{
     'topic': 'some_topic',
-    'endpoint': 'http://www.some_url.com',
+    'target': 'http://www.some_url.com',
     'type': 'http',
     'from_now': True
   },
   {
     'topic': 'another_topic',
-    'endpoint': 'http://www.another_url.com',
+    'target': 'http://www.another_url.com',
     'type': 'pubsub',
     'from_now': False
   }]
 POSTOFFICE_TIMEOUT = 0.3
+
 ORIGIN_HOST = 'example.com'
