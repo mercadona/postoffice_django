@@ -65,19 +65,19 @@ Once installed, you need to set `POSTOFFICE_URL`, `POSTOFFICE_CONSUMERS` and `PO
 
        POSTOFFICE_CONSUMERS = [{
            'topic': 'some_topic',
-           'endpoint': 'http://www.some_url.com',
+           'target': 'http://www.some_url.com',
            'type': 'http',
            },
            {
            'topic': 'another_topic',
-           'endpoint': 'http://www.another_url.com',
+           'target': 'http://www.another_url.com',
            'type': 'pubsub',
            }]
 
     :topic:
        Topic name to be created
 
-    :endpoint:
+    :target:
        Url or pub/sub topic name
 
     :type:
