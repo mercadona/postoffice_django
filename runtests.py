@@ -24,7 +24,7 @@ class PytestTestRunner(object):
         """
         import pytest
 
-        argv = ['--cov-report=xml', '--cov=postoffice_django', 'tests/']
+        argv = ['--cov-report=html', '--cov=postoffice_django', 'tests/']
         if self.verbosity == 0:
             argv.append('--quiet')
         if self.verbosity == 2:
