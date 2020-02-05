@@ -1,0 +1,15 @@
+version: 2
+jobs:
+  build:
+    docker:
+      - image: circleci/python:3.8
+      - image: circleci/postgres:9.6.5-alpine-ram
+        environment:
+          POSTGRES_USER: postoffice_django
+          POSTGRES_DB: postoffice_django
+          POSTGRES_PASSWORD: postoffice_django
+        command: -p 6543
+    steps:
+      - checkout
+      - run: pip install tox
+      - run: tox --parallel all
