@@ -1,0 +1,16 @@
+version: 2
+jobs:
+  build:
+    docker:
+      - image: circleci/python:3.8
+      - image: circleci/postgres:9.6.5-alpine-ram
+        environment:
+          POSTGRES_USER: postoffice_django
+          POSTGRES_DB: postoffice_django
+          POSTGRES_PASSWORD: postoffice_django
+    steps:
+      - checkout
+      - run: pip install -r requirements/test.txt
+      - test:
+          override:
+            - tox
