@@ -16,7 +16,7 @@ def configure():
 
 def _create_topic(topic_name):
     url = f'{settings.get_url()}/api/topics/'
-    payload = {'name': topic_name}
+    payload = {'name': topic_name, 'origin_host': settings.get_origin_host()}
 
     response = requests.post(url, json=payload)
     _save_creation_result_log(response)

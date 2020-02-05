@@ -3,7 +3,7 @@ from decimal import Decimal
 
 from django.conf import settings
 
-from .exceptions import ConsumersSettingNotDefined, UrlSettingNotDefined
+from .exceptions import ConsumersSettingNotDefined, UrlSettingNotDefined, OriginHostSettingNotDefined
 
 logger = logging.getLogger(__name__)
 
@@ -31,3 +31,10 @@ def get_timeout() -> Decimal:
         logger.info(
             f'Timeout not defined, using default value: {DEFAULT_TIMEOUT} (s)')
         return DEFAULT_TIMEOUT
+
+
+def get_origin_host():
+    try:
+        return settings.ORIGIN_HOST
+    except AttributeError:
+        raise OriginHostSettingNotDefined
