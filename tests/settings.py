@@ -41,3 +41,4 @@ POSTOFFICE_CONSUMERS = [{
     'from_now': False
   }]
 POSTOFFICE_TIMEOUT = 0.3
+ORIGIN_HOST = 'example.com'

@@ -35,10 +35,10 @@ class TestConfig:
         configure()
 
         assert json.loads(responses.calls[0].request.body) == {
-            'name': 'some_topic'
+            'name': 'some_topic', 'origin_host': 'example.com'
         }
         assert json.loads(responses.calls[2].request.body) == {
-            'name': 'another_topic'
+            'name': 'another_topic', 'origin_host': 'example.com'
         }
 
     def test_request_body_sent_to_create_publishers(self, settings):

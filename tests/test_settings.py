@@ -1,11 +1,11 @@
 import pytest
 
-from postoffice_django.exceptions import ConsumersSettingNotDefined, UrlSettingNotDefined
+from postoffice_django.exceptions import ConsumersSettingNotDefined, UrlSettingNotDefined, OriginHostSettingNotDefined
 
-from postoffice_django.settings import get_consumers, get_timeout, get_url
+from postoffice_django.settings import get_consumers, get_timeout, get_url, get_origin_host
 
 
-class SettingsTest:
+class TestSettings:
     def test_raise_exception_when_post_office_url_is_not_defined(self, settings):
         del(settings.POSTOFFICE_URL)
 
@@ -22,3 +22,9 @@ class SettingsTest:
         del(settings.POSTOFFICE_TIMEOUT)
 
         assert 0.5 == get_timeout()
+
+    def test_raise_exception_when_origin_host_is_not_defined(self, settings):
+        del(settings.ORIGIN_HOST)
+
+        with pytest.raises(OriginHostSettingNotDefined):
+            get_origin_host()
