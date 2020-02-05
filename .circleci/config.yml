@@ -11,5 +11,5 @@ jobs:
         command: -p 6543
     steps:
       - checkout
-      - run: pip install -r requirements/test.txt
+      - run: pip install tox
       - run: tox
