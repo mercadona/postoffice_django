@@ -2,6 +2,11 @@
 Post office django client
 =========================
 
+.. image:: https://circleci.com/gh/mercadona/postoffice_django/tree/master.svg?style=svg
+    :target: https://circleci.com/gh/mercadona/postoffice_django/tree/master
+
+
+
 What is post office django
 ==========================
 `postoffice_django` is a django app to communicate with [postoffice](https://github.com/lonamiaec/postoffice/).
