@@ -5,6 +5,8 @@ Post office django client
 .. image:: https://circleci.com/gh/mercadona/postoffice_django/tree/master.svg?style=svg
     :target: https://circleci.com/gh/mercadona/postoffice_django/tree/master
 
+.. image:: https://badge.fury.io/py/postoffice-django.svg
+    :target: https://badge.fury.io/py/postoffice-django
 
 
 What is post office django
