@@ -11,6 +11,4 @@ jobs:
     steps:
       - checkout
       - run: pip install -r requirements/test.txt
-      - test:
-          override:
-            - tox
+      - run: tox
