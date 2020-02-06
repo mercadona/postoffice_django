@@ -18,7 +18,7 @@ jobs:
       - run:
           name: Run test matrix
           command: |
-            tox -vv --parallel all
+            tox -vv
       - run:
           name: Test coverage
           command: |
