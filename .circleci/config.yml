@@ -12,10 +12,10 @@ jobs:
     steps:
       - checkout
       - run:
-        name: Intall tox
-        command: |
-          pip install tox
+          name: Intall tox
+          command: |
+            pip install tox
       - run:
-        name: Run test matrix
-        command: |
-          tox -v --parallel all
+          name: Run test matrix
+          command: |
+            tox -v --parallel all
