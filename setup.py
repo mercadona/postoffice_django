@@ -1,7 +1,9 @@
 import os
+import sys
 from os import path
 
 from setuptools import find_packages, setup
+from setuptools.command.install import install
 
 README = open(os.path.join(os.path.dirname(__file__), 'README.md')).read()
 
@@ -9,12 +11,28 @@ README = open(os.path.join(os.path.dirname(__file__), 'README.md')).read()
 os.chdir(os.path.normpath(os.path.join(os.path.abspath(__file__), os.pardir)))
 
 current_directory = path.abspath(path.dirname(__file__))
+
 with open(path.join(current_directory, 'README.md'), encoding='utf-8') as file:
     long_description = file.read()
 
+
+VERSION = '0.4.0'
+
+
+class VerifyVersionCommand(install):
+    description = 'Verify that the git tag matches our version'
+
+    def run(self):
+        tag = os.getenv('CIRCLE_TAG')
+
+        if tag != VERSION:
+            info = f"Git tag: {tag} does not match the version of this app: {VERSION}"
+            sys.exit(info)
+
+
 setup(
     name='postoffice_django',
-    version='0.4.0',
+    version=VERSION,
     packages=find_packages(exclude=("tests",)),
     include_package_data=True,
     license='APACHE License',
@@ -37,4 +55,7 @@ setup(
         'Programming Language :: Python :: 3.7',
         'Programming Language :: Python :: 3.8',
     ],
+    cmdclass={
+        'verify': VerifyVersionCommand,
+    }
 )
