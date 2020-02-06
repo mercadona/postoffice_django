@@ -12,9 +12,9 @@ jobs:
     steps:
       - checkout
       - run:
-          name: Intall tox
+          name: Install dependencies
           command: |
-            pip install tox
+            pip install tox codecov
       - run:
           name: Run test matrix
           command: |
