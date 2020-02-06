@@ -11,5 +11,11 @@ jobs:
         command: -p 6543
     steps:
       - checkout
-      - run: pip install tox
-      - run: tox --parallel all
+      - run:
+        name: Intall tox
+        command: |
+          pip install tox
+      - run:
+        name: Run test matrix
+        command: |
+          tox -v --parallel all
