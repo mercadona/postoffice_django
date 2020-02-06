@@ -7,7 +7,8 @@ from django.conf import settings
 
 from postoffice_django import checks
 
-POSTOFFICE_URL = settings.POSTOFFICE_URL
+POSTOFFICE_URL = settings.POSTOFFICE['URL']
+
 
 class TestPostOfficeHealth:
     def test_returns_true_when_postoffice_is_ok(self):

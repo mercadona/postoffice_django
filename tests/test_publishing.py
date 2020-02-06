@@ -11,12 +11,13 @@ from django.conf import settings
 from postoffice_django.models import PublishingError
 from postoffice_django.publishing import publish
 
-POSTOFFICE_URL = settings.POSTOFFICE_URL
+POSTOFFICE_URL = settings.POSTOFFICE['URL']
 
 
 @pytest.mark.django_db
 class TestPublishing:
     POSTSERVICE_PUBLISH_MESSAGE_URL = f'{POSTOFFICE_URL}/api/messages/'
+
     @pytest.fixture
     def post_service_valid_response(self):
         return json.dumps({'public_id': '12345'})
