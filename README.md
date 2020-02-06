@@ -30,19 +30,29 @@ Obviously, you need a django project up and running
 
 At the moment there are two ways to install the app:
 
-``` bash
+```bash
 $ pip install postoffice-django
 ```
 
 or add
 
-``` txt
+```txt
 postoffice-django
 ```
 
 to your requirements file
 
-Once installed, you need to set `POSTOFFICE_URL`, `POSTOFFICE_CONSUMERS`, `POSTOFFICE_TIMEOUT` and `ORIGIN_HOST` in your django settings file.
+Add it to your Django installed apps:
+
+
+```python
+INSTALLED_APPS = [
+    ...
+    'postoffice_django'
+]
+```
+
+Then, you need to set `POSTOFFICE_URL`, `POSTOFFICE_CONSUMERS`, `POSTOFFICE_TIMEOUT` and `ORIGIN_HOST` in your django settings file.
 
 - `POSTOFFICE_URL`: Is the `url` where server is hosted.
 
