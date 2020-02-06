@@ -1,4 +1,21 @@
-version: 2
+version: 2.1
+workflows:
+  version: 2
+  build_and_deploy:
+    jobs:
+      - build:
+          filters:
+            tags:
+              only: /.*/
+      - deploy:
+          requires:
+            - build
+          filters:
+            tags:
+              only: /[0-9]+(\.[0-9]+)*/
+            branches:
+              ignore: /.*/
+
 jobs:
   build:
     docker:
@@ -19,6 +36,15 @@ jobs:
           name: Run test matrix
           command: |
             tox -vv --parallel all
+  deploy:
+    docker:
+      - image: circleci/python:3.8
+    steps:
+      - checkout
+      - run:
+        name: Install dependencies
+        command: |
+          pip install twine
       - run:
           name: Verify git tag vs. version
           command: |
@@ -38,19 +64,3 @@ jobs:
           name: Upload to pypi
           command: |
             twine upload dist/*
-workflows:
-  version: 2
-  build_and_deploy:
-    jobs:
-      - build:
-          filters:
-            tags:
-              only: /.*/
-      - deploy:
-          requires:
-            - build
-          filters:
-            tags:
-              only: /[0-9]+(\.[0-9]+)*/
-            branches:
-              ignore: /.*/
