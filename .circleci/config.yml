@@ -42,9 +42,9 @@ jobs:
     steps:
       - checkout
       - run:
-        name: Install dependencies
-        command: |
-          pip install twine
+          name: Install dependencies
+          command: |
+            pip install twine
       - run:
           name: Verify git tag vs. version
           command: |
