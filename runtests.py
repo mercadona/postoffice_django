@@ -24,7 +24,7 @@ class PytestTestRunner(object):
         """
         import pytest
 
-        argv = ['-cov-report=xml', '--cov=post_office', 'tests/']
+        argv = ['--cov-report=xml', '--cov=post_office', 'tests/']
         if self.verbosity == 0:
             argv.append('--quiet')
         if self.verbosity == 2:
