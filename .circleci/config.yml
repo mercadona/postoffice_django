@@ -19,3 +19,7 @@ jobs:
           name: Run test matrix
           command: |
             tox -v --parallel all
+      - run:
+          name: Test coverage
+          command: |
+            codecov -e TOXENV
