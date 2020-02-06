@@ -22,4 +22,6 @@ jobs:
       - run:
           name: Test coverage
           command: |
+            coverage combine
+            coverage xml
             codecov -e TOXENV
