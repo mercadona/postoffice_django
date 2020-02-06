@@ -3,14 +3,14 @@ from os import path
 
 from setuptools import find_packages, setup
 
-README = open(os.path.join(os.path.dirname(__file__), 'README.rst')).read()
+README = open(os.path.join(os.path.dirname(__file__), 'README.md')).read()
 
 # allow setup.py to be run from any path
 os.chdir(os.path.normpath(os.path.join(os.path.abspath(__file__), os.pardir)))
 
 current_directory = path.abspath(path.dirname(__file__))
-with open(path.join(current_directory, 'README.rst'), encoding='utf-8') as f:
-    long_description = f.read()
+with open(path.join(current_directory, 'README.md'), encoding='utf-8') as file:
+    long_description = file.read()
 
 setup(
     name='postoffice_django',
@@ -20,7 +20,7 @@ setup(
     license='APACHE License',
     description='A simple Django app to comunicate with post office',
     long_description=long_description,
-    long_description_content_type='text/x-rst',
+    long_description_content_type='text/markdown',
     url='https://github.com/mercadona/postoffice_django/',
     author='Mercadona',
     author_email='sofware.online@mercadona.es',
