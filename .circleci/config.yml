@@ -1,4 +1,21 @@
-version: 2
+version: 2.1
+workflows:
+  version: 2
+  build_and_deploy:
+    jobs:
+      - build:
+          filters:
+            tags:
+              only: /.*/
+      - deploy:
+          requires:
+            - build
+          filters:
+            tags:
+              only: /[0-9]+(\.[0-9]+)*/
+            branches:
+              ignore: /.*/
+
 jobs:
   build:
     docker:
@@ -11,5 +28,39 @@ jobs:
         command: -p 6543
     steps:
       - checkout
-      - run: pip install tox
-      - run: tox --parallel all
+      - run:
+          name: Install dependencies
+          command: |
+            pip install tox
+      - run:
+          name: Run test matrix
+          command: |
+            tox -vv --parallel all
+  deploy:
+    docker:
+      - image: circleci/python:3.8
+    steps:
+      - checkout
+      - run:
+          name: Install dependencies
+          command: |
+            pip install twine
+      - run:
+          name: Verify git tag vs. version
+          command: |
+            python setup.py verify
+      - run:
+          name: Init .pypirc
+          command: |
+            echo -e "[pypi]" >> ~/.pypirc
+            echo -e "username = $PYPI_USER" >> ~/.pypirc
+            echo -e "password = $PYPI_PASSWORD" >> ~/.pypirc
+      - run:
+          name: Create packages
+          command: |
+            python setup.py sdist
+            python setup.py bdist_wheel
+      - run:
+          name: Upload to pypi
+          command: |
+            twine upload dist/*
