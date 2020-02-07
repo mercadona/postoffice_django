@@ -1,5 +1,4 @@
 import json
-import os
 
 import pytest
 import responses
@@ -8,7 +7,7 @@ from django.conf import settings
 
 from postoffice_django.config import configure
 
-POSTOFFICE_URL = settings.POSTOFFICE_URL
+POSTOFFICE_URL = settings.POSTOFFICE['URL']
 
 
 @pytest.mark.django_db
