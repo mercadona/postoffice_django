@@ -1,5 +1,5 @@
 import logging
-from typing import Union, Any
+from typing import Union, Any, List
 
 from django.conf import settings
 
@@ -17,7 +17,7 @@ def get_url() -> str:
         raise UrlSettingNotDefined
 
 
-def get_consumers() -> str:
+def get_consumers() -> List[dict]:
     try:
         return settings.POSTOFFICE['CONSUMERS']
     except KeyError:
@@ -33,7 +33,7 @@ def get_timeout() -> Union[float, Any]:
         return DEFAULT_TIMEOUT
 
 
-def get_origin_host():
+def get_origin_host() -> str:
     try:
         return settings.POSTOFFICE['ORIGIN_HOST']
     except KeyError:
