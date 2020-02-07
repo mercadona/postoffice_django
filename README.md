@@ -100,7 +100,7 @@ We have the `publish` method from the `publishing` module
 ```python
 from postoffice_django.publishing import publish
 
-publish(topic: str, message: dict, **attributes: dict)
+publish(topic: str, message: dict, **attributes: dict) -> None
 ```
 
 - `topic`: Topic name. This topic **must** exist on postoffice to manage the message.
