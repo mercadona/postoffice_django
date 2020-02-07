@@ -50,74 +50,60 @@ INSTALLED_APPS = [
 ]
 ```
 
-Then, you need to set `POSTOFFICE_URL`, `POSTOFFICE_CONSUMERS`, `POSTOFFICE_TIMEOUT` and `ORIGIN_HOST` in your django settings file.
-
-- `POSTOFFICE_URL`: Is the `url` where server is hosted.
-
+Then, you need to set the required settings for your app:
 
 ```python
-POSTOFFICE_URL = 'http://some_site.org/'
+POSTOFFICE = {
+    'URL': 'http://fake.service',
+    'CONSUMERS': [{
+            'topic': 'some_topic',
+            'target': 'http://www.some_url.com',
+            'type': 'http',
+            'from_now': True
+        },
+        {
+            'topic': 'another_topic',
+            'target': 'http://www.another_url.com',
+            'type': 'pubsub',
+            'from_now': False
+        }],
+    'TIMEOUT': 0.3,
+    'ORIGIN_HOST': 'example.com'
+}
 ```
+- `URL`: Is the `url` where the Postoffice server is hosted.
 
-- `POSTOFFICE_CONSUMERS`: Are the consumers which must been configured as publishers in postoffice server. With that, we create the necessary topics and publishers on postoffice.
+- `CONSUMERS`: Are the consumers which must been configured as publishers in Postoffice server. With that, we create the necessary topics and publishers on Postoffice.
 
+    - `topic`: Topic name to be created
 
-```python
-POSTOFFICE_CONSUMERS = [{
-    'topic': 'some_topic',
-    'target': 'http://www.some_url.com',
-    'type': 'http',
-    },
-    {
-    'topic': 'another_topic',
-    'target': 'a-topic-name',
-    'type': 'pubsub',
-    }]
-```
+    - `target`: Url or pub/sub topic name
 
-- `topic`: Topic name to be created
+    - `type`: http/pubsub
 
-- `target`: Url or pub/sub topic name
-
-- `type`: http/pubsub
-
-- `POSTOFFICE_TIMEOUT`: Specific timeout to use on every communication with `postoffice`. If not specified the default value is 0.5 seconds.
-
-```python
-POSTOFFICE_TIMEOUT = 1
-```
+- `TIMEOUT`: Specific timeout to use on every communication with Postoffice. If not specified, the default value is 0.5 seconds.
 
 - `ORIGIN_HOST`: The host from where the topic is created (your host).  It is necessary in order to `postoffice` know where the topic come from.
 
-```python
-ORIGIN_HOST = 'myserver.mydomain'
-```
+## How to setup Postoffice via django command
 
-## How to setup postoffice via django command
-
-Now we ready to start sending messages to
-`postoffice`. But first, we must generate
-`topics` and
-`publishers` on postoffice. There is a
-django command to help on this
-
+Now we ready to start sending messages to `postoffice`. But first, we must generate `topics` and `publishers` on postoffice. There is a django command to help on this:
 
 ```bash
 $ ./manage.py configure_post_office
 ```
 
-
 ## Sending messages to postoffice
 
-We have the
-`publish` method from the
-`publishing` module
+We have the `publish` method from the `publishing` module
 
 ```python
-publish(topic, message, **attributes)
+from postoffice_django.publishing import publish
+
+publish(topic: str, message: dict, **attributes: dict)
 ```
 
-- `topic`: Topic name. This topic **must** exists to postoffice can manage the message.
+- `topic`: Topic name. This topic **must** exist on postoffice to manage the message.
 
 - `message`: Message to sent. This **must** be a dict.
 
