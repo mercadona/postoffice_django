@@ -127,7 +127,7 @@ class TestPublishing:
         publishing_error = PublishingError.objects.first()
         assert PublishingError.objects.count() == 1
         assert publishing_error.error == (
-            'Can not stablish connection with postoffice')
+            'Can not establish connection with postoffice')
         assert publishing_error.created_at == datetime.datetime(
             2019, 6, 19, 18, 59, 59, tzinfo=pytz.UTC)
 
@@ -142,6 +142,6 @@ class TestPublishing:
         publishing_error = PublishingError.objects.first()
         assert PublishingError.objects.count() == 1
         assert publishing_error.error == (
-            'Can not stablish connection with postoffice')
+            'Can not establish connection with postoffice')
         assert publishing_error.created_at == datetime.datetime(
             2019, 6, 19, 18, 59, 59, tzinfo=pytz.UTC)
