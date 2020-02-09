@@ -1,15 +1,15 @@
 import datetime
-from unittest.mock import patch
 import json
 import os
+from unittest.mock import patch
 
 import pytest
 import pytz
-import responses
 import requests
+import responses
+from django.conf import settings
 from freezegun import freeze_time
 
-from django.conf import settings
 from postoffice_django.models import PublishingError
 from postoffice_django.publishing import publish
 

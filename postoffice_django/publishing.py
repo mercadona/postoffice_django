@@ -1,9 +1,9 @@
 import requests
 from requests import Response
+from requests.exceptions import ConnectionError, ConnectTimeout
 
 from . import settings
 from .models import PublishingError
-from requests.exceptions import ConnectTimeout, ConnectionError
 
 
 def publish(topic: str, payload: dict, **attrs: dict) -> None:

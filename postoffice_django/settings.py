@@ -1,9 +1,13 @@
 import logging
-from typing import Union, Any, List
+from typing import Any, List, Union
 
 from django.conf import settings
 
-from .exceptions import ConsumersSettingNotDefined, UrlSettingNotDefined, OriginHostSettingNotDefined
+from .exceptions import (
+    ConsumersSettingNotDefined,
+    OriginHostSettingNotDefined,
+    UrlSettingNotDefined
+)
 
 logger = logging.getLogger(__name__)
 

@@ -2,7 +2,6 @@ import json
 
 import pytest
 import responses
-
 from django.conf import settings
 
 from postoffice_django.config import configure
