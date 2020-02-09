@@ -30,9 +30,13 @@ class TestPublishing:
             }
         })
 
-    def test_request_body_sent_is_correct_when_has_not_attributes(self, post_service_valid_response):
-        responses.add(responses.POST, self.POSTSERVICE_PUBLISH_MESSAGE_URL, status=201,
-                      body=post_service_valid_response, content_type='application/json')
+    def test_request_body_sent_is_correct_when_has_not_attributes(
+            self, post_service_valid_response):
+        responses.add(responses.POST,
+                      self.POSTSERVICE_PUBLISH_MESSAGE_URL,
+                      status=201,
+                      body=post_service_valid_response,
+                      content_type='application/json')
         payload = {
             'key': 'key_1',
             'key_2': 2
@@ -49,9 +53,13 @@ class TestPublishing:
             'attributes': {}
         }
 
-    def test_send_valid_payload_with_attributes_when_has_attributes(self, post_service_valid_response):
-        responses.add(responses.POST, self.POSTSERVICE_PUBLISH_MESSAGE_URL, status=201,
-                      body=post_service_valid_response, content_type='application/json')
+    def test_send_valid_payload_with_attributes_when_has_attributes(
+            self, post_service_valid_response):
+        responses.add(responses.POST,
+                      self.POSTSERVICE_PUBLISH_MESSAGE_URL,
+                      status=201,
+                      body=post_service_valid_response,
+                      content_type='application/json')
 
         publish(topic='some_topic', payload='some_payload', hive='vlc1')
 
@@ -61,9 +69,13 @@ class TestPublishing:
             'attributes': {'hive': 'vlc1'}
         }
 
-    def test_do_not_save_publishing_error_when_service_success(self, post_service_valid_response):
-        responses.add(responses.POST, self.POSTSERVICE_PUBLISH_MESSAGE_URL, status=201,
-                      body=post_service_valid_response, content_type='application/json')
+    def test_do_not_save_publishing_error_when_service_success(
+            self, post_service_valid_response):
+        responses.add(responses.POST,
+                      self.POSTSERVICE_PUBLISH_MESSAGE_URL,
+                      status=201,
+                      body=post_service_valid_response,
+                      content_type='application/json')
 
         publish(topic='some_topic', payload='some_payload')
 
@@ -71,7 +83,10 @@ class TestPublishing:
 
     @freeze_time('2019-06-19 20:59:59+02:00')
     def test_save_publishing_error_when_service_returns_500(self):
-        responses.add(responses.POST, self.POSTSERVICE_PUBLISH_MESSAGE_URL, status=500, body=json.dumps(''),
+        responses.add(responses.POST,
+                      self.POSTSERVICE_PUBLISH_MESSAGE_URL,
+                      status=500,
+                      body=json.dumps(''),
                       content_type='application/json')
 
         publish(topic='some_topic', payload='some_payload', hive='vlc1')
@@ -79,16 +94,22 @@ class TestPublishing:
         publishing_error = PublishingError.objects.first()
         assert PublishingError.objects.count() == 1
         assert publishing_error.error == 'Internal server error'
-        assert publishing_error.created_at == datetime.datetime(2019, 6, 19, 18, 59, 59, tzinfo=pytz.UTC)
+        assert publishing_error.created_at == datetime.datetime(
+            2019, 6, 19, 18, 59, 59, tzinfo=pytz.UTC)
 
     @freeze_time('2019-06-19 20:59:59+02:00')
-    def test_save_publishing_error_when_service_returns_422(self, post_service_unprocessable_entity_response):
-        responses.add(responses.POST, self.POSTSERVICE_PUBLISH_MESSAGE_URL, status=422,
-                      body=post_service_unprocessable_entity_response, content_type='application/json')
+    def test_save_publishing_error_when_service_returns_422(
+            self, post_service_unprocessable_entity_response):
+        responses.add(responses.POST,
+                      self.POSTSERVICE_PUBLISH_MESSAGE_URL,
+                      status=422,
+                      body=post_service_unprocessable_entity_response,
+                      content_type='application/json')
 
         publish(topic='some_topic', payload='some_payload', hive='vlc1')
 
         publishing_error = PublishingError.objects.first()
         assert PublishingError.objects.count() == 1
         assert publishing_error.error == 'Unprocessable Entity'
-        assert publishing_error.created_at == datetime.datetime(2019, 6, 19, 18, 59, 59, tzinfo=pytz.UTC)
+        assert publishing_error.created_at == datetime.datetime(
+            2019, 6, 19, 18, 59, 59, tzinfo=pytz.UTC)
