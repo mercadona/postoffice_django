@@ -5,6 +5,8 @@ from requests.exceptions import ConnectionError, ConnectTimeout
 from . import settings
 from .models import PublishingError
 
+CONNECTION_ERROR = 'Can not stablish connection with postoffice'
+
 
 def publish(topic: str, payload: dict, **attrs: dict) -> None:
     url = f'{settings.get_url()}/api/messages/'
@@ -25,7 +27,7 @@ def publish(topic: str, payload: dict, **attrs: dict) -> None:
 
 def _save_connection_not_stablished(message: dict) -> None:
     _create_publishing_error(message,
-                             'Can not stablish connection with postoffice')
+                             CONNECTION_ERROR)
 
 
 def _save_publishing_error(response: Response, message: dict) -> None:
