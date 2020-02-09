@@ -3,7 +3,7 @@ from requests import Response
 
 from . import settings
 from .models import PublishingError
-from requests.exceptions import ConnectTimeout
+from requests.exceptions import ConnectTimeout, ConnectionError
 
 
 def publish(topic: str, payload: dict, **attrs: dict) -> None:

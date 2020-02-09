@@ -118,9 +118,24 @@ class TestPublishing:
 
     @freeze_time('2019-06-19 20:59:59+02:00')
     @patch('postoffice_django.publishing.requests.post')
-    def test_save_publishing_error_when_can_connect_to_postoffice(
+    def test_save_publishing_error_when_postoffice_raises_timeout(
             self, post_mock):
         post_mock.side_effect = requests.exceptions.ConnectTimeout()
+
+        publish(topic='some_topic', payload='some_payload', hive='vlc1')
+
+        publishing_error = PublishingError.objects.first()
+        assert PublishingError.objects.count() == 1
+        assert publishing_error.error == (
+            'Can not stablish connection with postoffice')
+        assert publishing_error.created_at == datetime.datetime(
+            2019, 6, 19, 18, 59, 59, tzinfo=pytz.UTC)
+
+    @freeze_time('2019-06-19 20:59:59+02:00')
+    @patch('postoffice_django.publishing.requests.post')
+    def test_save_publishing_error_when_postoffice_raises_connection_error(
+            self, post_mock):
+        post_mock.side_effect = requests.exceptions.ConnectionError()
 
         publish(topic='some_topic', payload='some_payload', hive='vlc1')
 
