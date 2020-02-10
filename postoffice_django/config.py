@@ -1,6 +1,7 @@
 import logging
 
 import requests
+from requests.exceptions import ConnectionError, ConnectTimeout
 
 from postoffice_django.exceptions import BadPublisherCreation, BadTopicCreation
 
@@ -52,6 +53,13 @@ def _create_topic(topic_name: str) -> None:
 
 
 def _execute_request(url, payload):
-    response = requests.post(url, json=payload)
+    try:
+        response = requests.post(
+            url,
+            json=payload,
+            timeout=settings.get_timeout()
+        )
+    except (ConnectTimeout, ConnectionError):
+        return False
 
     return response.status_code == 201

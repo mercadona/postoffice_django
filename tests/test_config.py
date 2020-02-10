@@ -1,6 +1,8 @@
 import json
+from unittest.mock import patch
 
 import pytest
+import requests
 import responses
 from django.conf import settings
 
@@ -57,6 +59,22 @@ class TestConfigurePublishers:
                       status=400,
                       body=publisher_already_exists,
                       content_type='application/json')
+
+        with pytest.raises(BadPublisherCreation):
+            configure_publishers()
+
+    @patch('postoffice_django.config.requests.post')
+    def test_raise_exception_when_postoffice_raises_timeout(
+            self, post_mock):
+        post_mock.side_effect = requests.exceptions.ConnectTimeout()
+
+        with pytest.raises(BadPublisherCreation):
+            configure_publishers()
+
+    @patch('postoffice_django.config.requests.post')
+    def test_raise_exception_when_postoffice_raises_connection_error(
+            self, post_mock):
+        post_mock.side_effect = requests.exceptions.ConnectionError()
 
         with pytest.raises(BadPublisherCreation):
             configure_publishers()
@@ -138,6 +156,22 @@ class TestConfigureTopics:
                       status=400,
                       body=topic_already_exists,
                       content_type='application/json')
+
+        with pytest.raises(BadTopicCreation):
+            configure_topics()
+
+    @patch('postoffice_django.config.requests.post')
+    def test_raise_exception_when_postoffice_raises_timeout(
+            self, post_mock):
+        post_mock.side_effect = requests.exceptions.ConnectTimeout()
+
+        with pytest.raises(BadTopicCreation):
+            configure_topics()
+
+    @patch('postoffice_django.config.requests.post')
+    def test_raise_exception_when_postoffice_raises_connection_error(
+            self, post_mock):
+        post_mock.side_effect = requests.exceptions.ConnectionError()
 
         with pytest.raises(BadTopicCreation):
             configure_topics()
