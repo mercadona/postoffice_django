@@ -1,7 +1,6 @@
 import logging
 
 import requests
-from responses import Response
 
 from postoffice_django.exceptions import BadPublisherCreation, BadTopicCreation
 
