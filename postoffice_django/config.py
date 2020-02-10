@@ -4,6 +4,8 @@ import requests
 from responses import Response
 
 from . import settings
+from postoffice_django.exceptions import BadTopicCreation
+
 
 logger = logging.getLogger(__name__)
 
@@ -45,4 +47,5 @@ def _save_creation_result_log(response: Response) -> None:
     if response.status_code == 201:
         logger.info(f'{response.url} succesfully creation')
     else:
-        logger.error(f'{response.url} bad creation', extra=response.json())
+        raise BadTopicCreation(response.json()['data']['errors'])
+        # logger.error(f'{response.url} bad creation', extra=response.json())

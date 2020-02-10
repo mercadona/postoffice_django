@@ -16,3 +16,8 @@ class OriginHostSettingNotDefined(Exception):
 class TopicsSettingNotDefined(Exception):
     def __init__(self):
         self.message = 'TOPICS is not defined on settings'
+
+
+class BadTopicCreation(Exception):
+    def __init__(self, error):
+        self.message = f'Can not create topic. Error: {{ error }}'
