@@ -15,8 +15,11 @@ class TestConfigurePublishers:
     POSTOFFICE_PUBLISHER_CREATION_URL = f'{POSTOFFICE_URL}/api/publishers/'
 
     def test_publishers(self, settings):
-        responses.add(responses.POST, self.POSTOFFICE_PUBLISHER_CREATION_URL, status=201,
-                      body="", content_type='application/json')
+        responses.add(responses.POST,
+                      self.POSTOFFICE_PUBLISHER_CREATION_URL,
+                      status=201,
+                      body="",
+                      content_type='application/json')
 
         configure_publishers()
 
@@ -38,10 +41,11 @@ class TestConfigurePublishers:
     #     }
 
     def test_request_body_sent_to_create_publishers(self, settings):
-        # responses.add(responses.POST, self.POSTOFFICE_TOPIC_CREATION_URL, status=201,
-        #               body="", content_type='application/json')
-        responses.add(responses.POST, self.POSTOFFICE_PUBLISHER_CREATION_URL, status=201,
-                      body="", content_type='application/json')
+        responses.add(responses.POST,
+                      self.POSTOFFICE_PUBLISHER_CREATION_URL,
+                      status=201,
+                      body="",
+                      content_type='application/json')
 
         configure_publishers()
 
