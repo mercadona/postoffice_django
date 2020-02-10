@@ -29,7 +29,8 @@ AUTHENTICATION_BACKENDS = (
 
 POSTOFFICE = {
     'URL': 'http://fake.service',
-    'CONSUMERS': [{
+    'CONSUMERS': [
+        {
             'topic': 'some_topic',
             'target': 'http://www.some_url.com',
             'type': 'http',
@@ -41,6 +42,7 @@ POSTOFFICE = {
             'type': 'pubsub',
             'from_now': False
         }],
+    'TOPICS': ['topic_to_be_created', 'another_topic_to_be_created'],
     'TIMEOUT': 0.3,
     'ORIGIN_HOST': 'example.com'
 }

@@ -3,11 +3,10 @@ from typing import Any, List, Union
 
 from django.conf import settings
 
-from .exceptions import (
-    ConsumersSettingNotDefined,
-    OriginHostSettingNotDefined,
-    UrlSettingNotDefined
-)
+from .exceptions import (ConsumersSettingNotDefined,
+                         UrlSettingNotDefined,
+                         OriginHostSettingNotDefined,
+                         TopicsSettingNotDefined)
 
 logger = logging.getLogger(__name__)
 
@@ -42,3 +41,10 @@ def get_origin_host() -> str:
         return settings.POSTOFFICE['ORIGIN_HOST']
     except KeyError:
         raise OriginHostSettingNotDefined
+
+
+def get_topics() -> List[str]:
+    try:
+        return settings.POSTOFFICE['TOPICS']
+    except KeyError:
+        raise TopicsSettingNotDefined
