@@ -4,16 +4,21 @@ import requests
 from responses import Response
 
 from . import settings
-from postoffice_django.exceptions import BadTopicCreation
+from postoffice_django.exceptions import BadPublisherCreation, BadTopicCreation
 
 
 logger = logging.getLogger(__name__)
 
 
 def configure_publishers() -> None:
+    uncreated_publishers = []
 
     for consumer in settings.get_consumers():
-        _create_publishers(consumer)
+        if not _create_publishers(consumer):
+            uncreated_publishers.append(consumer)
+
+    if uncreated_publishers:
+        raise BadPublisherCreation(uncreated_publishers)
 
 
 def configure_topics() -> None:
@@ -38,7 +43,8 @@ def _create_publishers(consumer: dict) -> None:
     }
 
     response = requests.post(url, json=payload)
-    _save_creation_result_log(response)
+
+    return response.status_code == 201
 
 
 def _create_topic(topic_name: str) -> None:
@@ -48,11 +54,3 @@ def _create_topic(topic_name: str) -> None:
     response = requests.post(url, json=payload)
 
     return response.status_code == 201
-
-
-def _save_creation_result_log(response: Response) -> None:
-    if response.status_code == 201:
-        logger.info(f'{response.url} succesfully creation')
-    else:
-        # raise BadTopicCreation(response.json()['data']['errors'])
-        logger.error(f'{response.url} bad creation', extra=response.json())

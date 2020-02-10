@@ -19,5 +19,12 @@ class TopicsSettingNotDefined(Exception):
 
 
 class BadTopicCreation(Exception):
-    def __init__(self, errors):
-        self.message = f'Can not create topic. Errors: { errors }'
+    def __init__(self, topic_name):
+        self.message = (
+            f'Can not create topic. Topic no created: { topic_name }')
+
+
+class BadPublisherCreation(Exception):
+    def __init__(self, publisher):
+        self.message = (
+            f'Can not create publisher. Publisher not created: { publisher }')
