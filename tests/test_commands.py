@@ -11,3 +11,12 @@ class TestConfigurePublishersCommand:
         call_command('configure_post_office_publishers')
 
         config_mock.assert_called()
+
+
+@pytest.mark.django_db
+class TestConfigureTopicsCommand:
+    @patch('postoffice_django.config.configure_topics')
+    def test_config_command(self, config_mock):
+        call_command('configure_post_office_topics')
+
+        config_mock.assert_called()

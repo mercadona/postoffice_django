@@ -50,7 +50,7 @@ class TestConfigurePublishers:
             'from_now': True
         }
 
-    def test_raise_exception_when_can_not_create_publishers(
+    def test_raise_exception_when_can_not_create_publisher(
             self, settings, publisher_already_exists):
         responses.add(responses.POST,
                       self.POSTOFFICE_PUBLISHER_CREATION_URL,
@@ -61,7 +61,7 @@ class TestConfigurePublishers:
         with pytest.raises(BadPublisherCreation):
             configure_publishers()
 
-    def test_try_create_all_publishers_when_some_topic_fails(
+    def test_try_create_all_publishers_when_some_publisher_fails(
             self, settings, publisher_already_exists):
         responses.add(responses.POST,
                       self.POSTOFFICE_PUBLISHER_CREATION_URL,

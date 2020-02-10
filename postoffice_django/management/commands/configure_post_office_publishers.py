@@ -4,7 +4,7 @@ from ...config import configure_publishers
 
 
 class Command(BaseCommand):
-    help = 'Create all topics and publishers to can use post office'
+    help = 'Create all publishers to can consume messages via postoffice'
 
     def handle(self, *args, **kwargs):
         configure_publishers()
