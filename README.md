@@ -8,9 +8,9 @@
 
 ## Features
 
-- Set up server via django command `configure_post_office`
-  - Create necessary `topics` on `postoffice` server
-  - Create necessary `publishers` on `postoffice`
+- Set up server via django commands:
+  - Create necessary `topics` on `postoffice` with `configure_post_office_publishers` to can publish a message
+  - Create necessary `publishers` on `postoffice` with `configure_post_office_topics` to can consume messages
 - Send messages in a easy way to `post office server`
 
 ## How to install it
@@ -68,14 +68,15 @@ POSTOFFICE = {
             'from_now': False
         }],
     'TIMEOUT': 0.3,
-    'ORIGIN_HOST': 'example.com'
+    'ORIGIN_HOST': 'example.com',
+    'TOPICS': ['topic_to_create', 'another_topic_to_create']
 }
 ```
 - `URL`: Is the `url` where the Postoffice server is hosted.
 
 - `CONSUMERS`: Are the consumers which must been configured as publishers in Postoffice server. With that, we create the necessary topics and publishers on Postoffice.
 
-    - `topic`: Topic name to be created
+    - `topic`: Topic name to the consumer
 
     - `target`: Url or pub/sub topic name
 
@@ -84,6 +85,8 @@ POSTOFFICE = {
 - `TIMEOUT`: Specific timeout to use on every communication with Postoffice. If not specified, the default value is 0.5 seconds.
 
 - `ORIGIN_HOST`: The host from where the topic is created (your host).  It is necessary in order to `postoffice` know where the topic come from.
+
+- `TOPICS`: Topics to create to can send messages to `postoffice`
 
 ## How to setup Postoffice via django command
 
