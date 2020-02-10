@@ -4,7 +4,7 @@ from ...config import configure_topics
 
 
 class Command(BaseCommand):
-    help = 'Create all topics to can publish to post office'
+    help = 'Create all topics to can publish messages to post office'
 
     def handle(self, *args, **kwargs):
         configure_topics()
