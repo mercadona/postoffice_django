@@ -41,15 +41,17 @@ def _create_publishers(consumer: dict) -> None:
         'from_now': True
     }
 
-    response = requests.post(url, json=payload)
-
-    return response.status_code == 201
+    return _execute_request(url, payload)
 
 
 def _create_topic(topic_name: str) -> None:
     url = f'{settings.get_url()}/api/topics/'
     payload = {'name': topic_name, 'origin_host': settings.get_origin_host()}
 
+    return _execute_request(url, payload)
+
+
+def _execute_request(url, payload):
     response = requests.post(url, json=payload)
 
     return response.status_code == 201
