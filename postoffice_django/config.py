@@ -17,8 +17,14 @@ def configure_publishers() -> None:
 
 
 def configure_topics() -> None:
+    uncreated_topics = []
+
     for topic in settings.get_topics():
-        _create_topic(topic)
+        if not _create_topic(topic):
+            uncreated_topics.append(topic)
+
+    if uncreated_topics:
+        raise BadTopicCreation(uncreated_topics)
 
 
 def _create_publishers(consumer: dict) -> None:
@@ -40,12 +46,13 @@ def _create_topic(topic_name: str) -> None:
     payload = {'name': topic_name, 'origin_host': settings.get_origin_host()}
 
     response = requests.post(url, json=payload)
-    _save_creation_result_log(response)
+
+    return response.status_code == 201
 
 
 def _save_creation_result_log(response: Response) -> None:
     if response.status_code == 201:
         logger.info(f'{response.url} succesfully creation')
     else:
-        raise BadTopicCreation(response.json()['data']['errors'])
-        # logger.error(f'{response.url} bad creation', extra=response.json())
+        # raise BadTopicCreation(response.json()['data']['errors'])
+        logger.error(f'{response.url} bad creation', extra=response.json())

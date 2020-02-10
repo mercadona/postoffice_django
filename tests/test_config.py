@@ -93,3 +93,29 @@ class TestConfigureTopics:
 
         with pytest.raises(BadTopicCreation):
             configure_topics()
+
+    def test_try_create_all_topics_when_some_topic_fails(
+            self, settings, topic_already_exists):
+        responses.add(responses.POST,
+                      self.POSTOFFICE_TOPIC_CREATION_URL,
+                      status=400,
+                      body=topic_already_exists,
+                      content_type='application/json')
+        responses.add(responses.POST,
+                      self.POSTOFFICE_TOPIC_CREATION_URL,
+                      status=201,
+                      body="",
+                      content_type='application/json')
+
+        with pytest.raises(BadTopicCreation) as bad_topic_creation_exception:
+            configure_topics()
+
+        assert bad_topic_creation_exception.value.message == (
+            'Can not create topic. Errors: [\'topic_to_be_created\']')
+        assert len(responses.calls) == 2
+        assert json.loads(responses.calls[0].request.body) == {
+            'name': 'topic_to_be_created', 'origin_host': 'example.com'
+        }
+        assert json.loads(responses.calls[1].request.body) == {
+            'name': 'another_topic_to_be_created', 'origin_host': 'example.com'
+        }

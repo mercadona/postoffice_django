@@ -19,5 +19,5 @@ class TopicsSettingNotDefined(Exception):
 
 
 class BadTopicCreation(Exception):
-    def __init__(self, error):
-        self.message = f'Can not create topic. Error: {{ error }}'
+    def __init__(self, errors):
+        self.message = f'Can not create topic. Errors: { errors }'
