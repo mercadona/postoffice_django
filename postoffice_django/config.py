@@ -52,7 +52,7 @@ def _create_topic(topic_name: str) -> None:
     return _execute_request(url, payload)
 
 
-def _execute_request(url, payload):
+def _execute_request(url: str, payload: dict):
     try:
         response = requests.post(
             url,
