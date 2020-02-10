@@ -7,19 +7,11 @@ from . import settings
 logger = logging.getLogger(__name__)
 
 
-def configure():
+def configure_publishers():
 
     for consumer in settings.get_consumers():
-        _create_topic(consumer.get('topic'))
+        # _create_topic(consumer.get('topic'))
         _create_publishers(consumer)
-
-
-def _create_topic(topic_name):
-    url = f'{settings.get_url()}/api/topics/'
-    payload = {'name': topic_name, 'origin_host': settings.get_origin_host()}
-
-    response = requests.post(url, json=payload)
-    _save_creation_result_log(response)
 
 
 def _create_publishers(consumer):
@@ -41,3 +33,11 @@ def _save_creation_result_log(response):
         logger.info(f'{response.url} succesfully creation')
     else:
         logger.error(f'{response.url} bad creation', extra=response.json())
+
+
+# def _create_topic(topic_name):
+#     url = f'{settings.get_url()}/api/topics/'
+#     payload = {'name': topic_name, 'origin_host': settings.get_origin_host()}
+
+#     response = requests.post(url, json=payload)
+#     _save_creation_result_log(response)
