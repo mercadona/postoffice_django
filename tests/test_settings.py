@@ -1,8 +1,16 @@
 import pytest
 
-from postoffice_django.exceptions import ConsumersSettingNotDefined, UrlSettingNotDefined, OriginHostSettingNotDefined
-
-from postoffice_django.settings import get_consumers, get_timeout, get_url, get_origin_host
+from postoffice_django.exceptions import (
+    ConsumersSettingNotDefined,
+    OriginHostSettingNotDefined,
+    UrlSettingNotDefined
+)
+from postoffice_django.settings import (
+    get_consumers,
+    get_origin_host,
+    get_timeout,
+    get_url
+)
 
 
 class TestSettings:
