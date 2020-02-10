@@ -5,9 +5,7 @@ import responses
 from django.conf import settings
 
 from postoffice_django.config import configure_publishers, configure_topics
-from postoffice_django.exceptions import (BadPublisherCreation,
-    BadTopicCreation)
-
+from postoffice_django.exceptions import BadPublisherCreation, BadTopicCreation
 
 POSTOFFICE_URL = settings.POSTOFFICE['URL']
 

@@ -3,9 +3,9 @@ import logging
 import requests
 from responses import Response
 
-from . import settings
 from postoffice_django.exceptions import BadPublisherCreation, BadTopicCreation
 
+from . import settings
 
 logger = logging.getLogger(__name__)
 
