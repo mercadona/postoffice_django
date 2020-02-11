@@ -10,7 +10,11 @@ CONNECTION_ERROR = 'Can not establish connection with postoffice'
 
 def publish(topic: str, payload: dict, **attrs: dict) -> None:
     url = f'{settings.get_url()}/api/messages/'
-    message = {'topic': topic, 'payload': payload, 'attributes': attrs}
+    message = {
+        'topic': topic,
+        'payload': payload,
+        'attributes': _build_attributes(attrs)
+    }
 
     try:
         response = requests.post(url,
@@ -23,6 +27,14 @@ def publish(topic: str, payload: dict, **attrs: dict) -> None:
 
     if response.status_code != 201:
         _save_publishing_error(response, message)
+
+
+def _build_attributes(attributes: dict) -> dict:
+    curated_attributes = {}
+    for key in attributes.keys():
+        curated_attributes[key] = str(attributes[key])
+
+    return curated_attributes
 
 
 def _save_connection_not_stablished(message: dict) -> None:
