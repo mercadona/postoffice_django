@@ -118,4 +118,4 @@ publish(topic: str, message: dict, **attributes: dict) -> None
 
 - `message`: Message to sent. This **must** be a dict.
 
-- `attributes`: Additional attr.
+- `attributes`: Additional attr. All attributes are cast to string when publish a message
