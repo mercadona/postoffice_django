@@ -13,7 +13,7 @@ def publish(topic: str, payload: dict, **attrs: dict) -> None:
     message = {
         'topic': topic,
         'payload': payload,
-        'attributes': _build_attributes(attrs)
+        'attributes': _stringify_attributes(attrs)
     }
 
     try:
@@ -29,7 +29,7 @@ def publish(topic: str, payload: dict, **attrs: dict) -> None:
         _save_publishing_error(response, message)
 
 
-def _build_attributes(attributes: dict) -> dict:
+def _stringify_attributes(attributes: dict) -> dict:
     return {key: str(attributes[key]) for key in attributes.keys()}
 
 
