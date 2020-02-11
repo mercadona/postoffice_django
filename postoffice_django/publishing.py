@@ -30,11 +30,7 @@ def publish(topic: str, payload: dict, **attrs: dict) -> None:
 
 
 def _build_attributes(attributes: dict) -> dict:
-    curated_attributes = {}
-    for key in attributes.keys():
-        curated_attributes[key] = str(attributes[key])
-
-    return curated_attributes
+    return {key: str(attributes[key]) for key in attributes.keys()}
 
 
 def _save_connection_not_stablished(message: dict) -> None:
