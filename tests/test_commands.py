@@ -8,7 +8,7 @@ from django.core.management import call_command
 class TestConfigurePublishersCommand:
     @patch('postoffice_django.config.configure_publishers')
     def test_config_command(self, config_mock):
-        call_command('configure_post_office_publishers')
+        call_command('configure_postoffice_publishers')
 
         config_mock.assert_called()
 
@@ -17,6 +17,6 @@ class TestConfigurePublishersCommand:
 class TestConfigureTopicsCommand:
     @patch('postoffice_django.config.configure_topics')
     def test_config_command(self, config_mock):
-        call_command('configure_post_office_topics')
+        call_command('configure_postoffice_topics')
 
         config_mock.assert_called()
