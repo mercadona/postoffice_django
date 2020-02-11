@@ -25,12 +25,8 @@ class TestPublishing:
         return json.dumps({'public_id': '12345'})
 
     @pytest.fixture
-    def post_service_unprocessable_entity_response(self):
-        return json.dumps({
-            "errors": {
-                "detail": "Unprocessable Entity"
-            }
-        })
+    def postoffice_publishing_error_response(self):
+        return json.dumps({'data': {'errors': {'topic': ['is invalid']}}})
 
     def test_request_body_sent_is_correct_when_has_not_attributes(
             self, postoffice_valid_response):
@@ -121,19 +117,19 @@ class TestPublishing:
             2019, 6, 19, 18, 59, 59, tzinfo=pytz.UTC)
 
     @freeze_time('2019-06-19 20:59:59+02:00')
-    def test_save_publishing_error_when_service_returns_422(
-            self, post_service_unprocessable_entity_response):
+    def test_save_publishing_error_when_service_returns_400(
+            self, postoffice_publishing_error_response):
         responses.add(responses.POST,
                       self.POSTOFFICE_PUBLISH_MESSAGE_URL,
-                      status=422,
-                      body=post_service_unprocessable_entity_response,
+                      status=400,
+                      body=postoffice_publishing_error_response,
                       content_type='application/json')
 
         publish(topic='some_topic', payload='some_payload', hive='vlc1')
 
         publishing_error = PublishingError.objects.first()
         assert PublishingError.objects.count() == 1
-        assert publishing_error.error == 'Unprocessable Entity'
+        assert publishing_error.error == '{\'topic\': [\'is invalid\']}'
         assert publishing_error.created_at == datetime.datetime(
             2019, 6, 19, 18, 59, 59, tzinfo=pytz.UTC)
 
