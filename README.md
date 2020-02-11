@@ -95,13 +95,13 @@ Now we ready to start sending messages to `postoffice`. But first, we must gener
 If we need create the topics to can publish, we should execute:
 
 ```bash
-$ ./mana.py configure_postoffice_topics
+$ ./manage.py configure_postoffice_topics
 ```
 
 and, if we need create the publishers, we should execute:
 
 ```bash
-$ ./mana.py configure_postoffice_publishers
+$ ./manage.py configure_postoffice_publishers
 ```
 
 ## Sending messages to postoffice
