@@ -79,13 +79,13 @@ class TestPublishing:
                       content_type='application/json')
 
         publish(topic='some_topic',
-                payload='some_payload',
+                payload={'key': 'value'},
                 number=1,
                 boolean=False)
 
         assert json.loads(responses.calls[0].request.body) == {
             'topic': 'some_topic',
-            'payload': 'some_payload',
+            'payload': {'key': 'value'},
             'attributes': {
                 'number': '1',
                 'boolean': 'False'
