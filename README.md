@@ -9,8 +9,8 @@
 ## Features
 
 - Set up server via django commands:
-  - Create necessary `topics` on `postoffice` with `configure_post_office_publishers` to can publish a message
-  - Create necessary `publishers` on `postoffice` with `configure_post_office_topics` to can consume messages
+  - Create necessary `topics` on `postoffice` with `configure_postoffice_publishers` to can publish a message
+  - Create necessary `publishers` on `postoffice` with `configure_postoffice_topics` to can consume messages
 - Send messages in a easy way to `post office server`
 
 ## How to install it
@@ -88,12 +88,20 @@ POSTOFFICE = {
 
 - `TOPICS`: Topics to create to can send messages to `postoffice`
 
-## How to setup Postoffice via django command
+## How to setup Postoffice via django commands
 
-Now we ready to start sending messages to `postoffice`. But first, we must generate `topics` and `publishers` on postoffice. There is a django command to help on this:
+Now we ready to start sending messages to `postoffice`. But first, we must generate `topics` and/or `publishers` on postoffice depending the purpose of the project with postoffice.
+
+If we need create the topics to can publish, we should execute:
 
 ```bash
-$ ./manage.py configure_post_office
+$ ./mana.py configure_postoffice_topics
+```
+
+and, if we need create the publishers, we should execute:
+
+```bash
+$ ./mana.py configure_postoffice_publishers
 ```
 
 ## Sending messages to postoffice
