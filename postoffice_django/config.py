@@ -1,11 +1,13 @@
 import logging
+from http import HTTPStatus
 
 import requests
-from requests.exceptions import ConnectionError, ConnectTimeout
-
-from postoffice_django.exceptions import BadPublisherCreation, BadTopicCreation
 
 from . import settings
+from postoffice_django.exceptions import (BadPublisherCreation,
+    BadTopicCreation)
+from requests.exceptions import ConnectTimeout, ConnectionError
+
 
 logger = logging.getLogger(__name__)
 
@@ -62,4 +64,4 @@ def _execute_request(url: str, payload: dict):
     except (ConnectTimeout, ConnectionError):
         return False
 
-    return response.status_code == 201
+    return response.status_code == HTTPStatus.CREATED
