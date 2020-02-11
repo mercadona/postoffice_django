@@ -1,28 +1,40 @@
 import logging
+from http import HTTPStatus
 
 import requests
 
 from . import settings
+from postoffice_django.exceptions import (BadPublisherCreation,
+    BadTopicCreation)
+from requests.exceptions import ConnectTimeout, ConnectionError
+
 
 logger = logging.getLogger(__name__)
 
 
-def configure():
+def configure_publishers() -> None:
+    uncreated_publishers = []
 
     for consumer in settings.get_consumers():
-        _create_topic(consumer.get('topic'))
-        _create_publishers(consumer)
+        if not _create_publishers(consumer):
+            uncreated_publishers.append(consumer)
+
+    if uncreated_publishers:
+        raise BadPublisherCreation(uncreated_publishers)
 
 
-def _create_topic(topic_name):
-    url = f'{settings.get_url()}/api/topics/'
-    payload = {'name': topic_name, 'origin_host': settings.get_origin_host()}
+def configure_topics() -> None:
+    uncreated_topics = []
 
-    response = requests.post(url, json=payload)
-    _save_creation_result_log(response)
+    for topic in settings.get_topics():
+        if not _create_topic(topic):
+            uncreated_topics.append(topic)
+
+    if uncreated_topics:
+        raise BadTopicCreation(uncreated_topics)
 
 
-def _create_publishers(consumer):
+def _create_publishers(consumer: dict) -> None:
     url = f'{settings.get_url()}/api/publishers/'
     payload = {
         'active': True,
@@ -32,12 +44,24 @@ def _create_publishers(consumer):
         'from_now': True
     }
 
-    response = requests.post(url, json=payload)
-    _save_creation_result_log(response)
+    return _execute_request(url, payload)
 
 
-def _save_creation_result_log(response):
-    if response.status_code == 201:
-        logger.info(f'{response.url} succesfully creation')
-    else:
-        logger.error(f'{response.url} bad creation', extra=response.json())
+def _create_topic(topic_name: str) -> None:
+    url = f'{settings.get_url()}/api/topics/'
+    payload = {'name': topic_name, 'origin_host': settings.get_origin_host()}
+
+    return _execute_request(url, payload)
+
+
+def _execute_request(url: str, payload: dict):
+    try:
+        response = requests.post(
+            url,
+            json=payload,
+            timeout=settings.get_timeout()
+        )
+    except (ConnectTimeout, ConnectionError):
+        return False
+
+    return response.status_code == HTTPStatus.CREATED

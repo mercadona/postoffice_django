@@ -6,6 +6,7 @@ from django.conf import settings
 from .exceptions import (
     ConsumersSettingNotDefined,
     OriginHostSettingNotDefined,
+    TopicsSettingNotDefined,
     UrlSettingNotDefined
 )
 
@@ -42,3 +43,10 @@ def get_origin_host() -> str:
         return settings.POSTOFFICE['ORIGIN_HOST']
     except KeyError:
         raise OriginHostSettingNotDefined
+
+
+def get_topics() -> List[str]:
+    try:
+        return settings.POSTOFFICE['TOPICS']
+    except KeyError:
+        raise TopicsSettingNotDefined
