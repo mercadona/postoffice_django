@@ -2,16 +2,16 @@
 
 [![image](https://circleci.com/gh/mercadona/postoffice_django/tree/master.svg?style=svg)](https://circleci.com/gh/mercadona/postoffice_django/tree/master) [![image](https://badge.fury.io/py/postoffice-django.svg)](https://badge.fury.io/py/postoffice-django)
 
-## What is post office django
+## What is postoffice django
 
 `postoffice_django` is a django app to communicate with [postoffice](<https://github.com/lonamiaec/postoffice/>).
 
 ## Features
 
 - Set up server via django commands:
-  - Create necessary `topics` on `postoffice` with `configure_postoffice_publishers` to can publish a message
-  - Create necessary `publishers` on `postoffice` with `configure_postoffice_topics` to can consume messages
-- Send messages in a easy way to `post office server`
+  - Create necessary `topics` in `postoffice` with `configure_postoffice_publishers` to be able to publish a message
+  - Create necessary `publishers` in `postoffice` with `configure_postoffice_topics` to be able to consume messages
+- Easily send messages to `postoffice server`
 
 ## How to install it
 
@@ -81,24 +81,24 @@ POSTOFFICE = {
     - `target`: Url or pub/sub topic name
 
     - `type`: http/pubsub
-
-- `TIMEOUT`: Specific timeout to use on every communication with Postoffice. If not specified, the default value is 0.5 seconds.
+    
+- `TIMEOUT`: Specific timeout to use in every communication with Postoffice. If not specified, the default value is 0.5 seconds.
 
 - `ORIGIN_HOST`: The host from where the topic is created (your host).  It is necessary in order to `postoffice` know where the topic come from.
 
-- `TOPICS`: Topics to create to can send messages to `postoffice`
+- `TOPICS`: Topics to be created in order to send messages to `postoffice`
 
 ## How to setup Postoffice via django commands
 
-Now we ready to start sending messages to `postoffice`. But first, we must generate `topics` and/or `publishers` on postoffice depending the purpose of the project with postoffice.
+Now we are ready to start sending messages to `postoffice`. But first, we must generate `topics` and/or `publishers` in postoffice depending on the purpose of the project with postoffice.
 
-If we need create the topics to can publish, we should execute:
+If we need to create the topics to be able to publish, we should execute:
 
 ```bash
 $ ./manage.py configure_postoffice_topics
 ```
 
-and, if we need create the publishers, we should execute:
+and, if we need to create the publishers, we should execute:
 
 ```bash
 $ ./manage.py configure_postoffice_publishers
@@ -116,6 +116,6 @@ publish(topic: str, message: dict, **attributes: dict) -> None
 
 - `topic`: Topic name. This topic **must** exist on postoffice to manage the message.
 
-- `message`: Message to sent. This **must** be a dict.
+- `message`: Message to be sent. This **must** be a dict.
 
-- `attributes`: Additional attr. All attributes are cast to string when publish a message
+- `attributes`: Additional attr. All attributes are cast to string when publishing a message.

@@ -39,7 +39,7 @@ def _save_connection_not_stablished(message: dict) -> None:
 
 
 def _save_publishing_error(response: Response, message: dict) -> None:
-    error = 'Uknown error'
+    error = 'Unknown error'
 
     if response.status_code == 500:
         error = 'Internal server error'

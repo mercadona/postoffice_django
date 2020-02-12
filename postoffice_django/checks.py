@@ -5,6 +5,7 @@ from . import settings
 
 OK_STATUS = {'status': 'ok'}
 
+
 def health():
     url = f'{settings.get_url()}/api/health/'
 
