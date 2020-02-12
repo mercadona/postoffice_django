@@ -44,8 +44,8 @@ def _save_publishing_error(response: Response, message: dict) -> None:
     if response.status_code == 500:
         error = 'Internal server error'
 
-    if response.status_code == 422:
-        error = response.json().get('errors').get('detail')
+    if response.status_code == 400:
+        error = response.json().get('data').get('errors')
 
     _create_publishing_error(message, error)
 
