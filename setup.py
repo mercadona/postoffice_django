@@ -36,7 +36,7 @@ setup(
     packages=find_packages(exclude=("tests",)),
     include_package_data=True,
     license='APACHE License',
-    description='A simple Django app to comunicate with post office',
+    description='A simple Django app to comunicate with postoffice',
     long_description=long_description,
     long_description_content_type='text/markdown',
     url='https://github.com/mercadona/postoffice_django/',
