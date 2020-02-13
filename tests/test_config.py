@@ -27,7 +27,7 @@ class TestConfigurePublishers:
         })
     POSTOFFICE_PUBLISHER_CREATION_URL = f'{POSTOFFICE_URL}/api/publishers/'
 
-    def test_request_body_sent_to_create_publishers(self, settings):
+    def test_request_body_sent_to_create_publishers(self):
         responses.add(responses.POST,
                       self.POSTOFFICE_PUBLISHER_CREATION_URL,
                       status=201,
@@ -53,7 +53,7 @@ class TestConfigurePublishers:
         }
 
     def test_raise_exception_when_can_not_create_publisher(
-            self, settings, publisher_already_exists):
+            self, publisher_already_exists):
         responses.add(responses.POST,
                       self.POSTOFFICE_PUBLISHER_CREATION_URL,
                       status=400,
@@ -80,7 +80,7 @@ class TestConfigurePublishers:
             configure_publishers()
 
     def test_try_create_all_publishers_when_some_publisher_fails(
-            self, settings, publisher_already_exists):
+            self, publisher_already_exists):
         responses.add(responses.POST,
                       self.POSTOFFICE_PUBLISHER_CREATION_URL,
                       status=400,
@@ -132,7 +132,7 @@ class TestConfigureTopics:
             }
         })
 
-    def test_request_body_sent_to_create_topic(self, settings):
+    def test_request_body_sent_to_create_topic(self):
         responses.add(responses.POST,
                       self.POSTOFFICE_TOPIC_CREATION_URL,
                       status=201,
@@ -150,7 +150,7 @@ class TestConfigureTopics:
         }
 
     def test_raise_exception_when_can_not_create_topics(
-            self, settings, topic_already_exists):
+            self, topic_already_exists):
         responses.add(responses.POST,
                       self.POSTOFFICE_TOPIC_CREATION_URL,
                       status=400,
@@ -177,7 +177,7 @@ class TestConfigureTopics:
             configure_topics()
 
     def test_try_create_all_topics_when_some_topic_fails(
-            self, settings, topic_already_exists):
+            self, topic_already_exists):
         responses.add(responses.POST,
                       self.POSTOFFICE_TOPIC_CREATION_URL,
                       status=400,

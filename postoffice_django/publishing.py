@@ -22,7 +22,7 @@ def publish(topic: str, payload: dict, **attrs: dict) -> None:
                                  timeout=settings.get_timeout()
                                  )
     except (ConnectTimeout, ConnectionError):
-        _save_connection_not_stablished(message)
+        _save_connection_not_established(message)
         return
 
     if response.status_code != 201:
@@ -33,9 +33,8 @@ def _stringify_attributes(attributes: dict) -> dict:
     return {key: str(attributes[key]) for key in attributes.keys()}
 
 
-def _save_connection_not_stablished(message: dict) -> None:
-    _create_publishing_error(message,
-                             CONNECTION_ERROR)
+def _save_connection_not_established(message: dict) -> None:
+    _create_publishing_error(message, CONNECTION_ERROR)
 
 
 def _save_publishing_error(response: Response, message: dict) -> None:
