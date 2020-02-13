@@ -12,7 +12,7 @@ DATABASES = {
         'USER': 'postoffice_django',
         'PASSWORD': 'postoffice_django',
         'HOST': 'localhost',
-        'PORT': '6542'
+        'PORT': '6543'
     },
 }
 
