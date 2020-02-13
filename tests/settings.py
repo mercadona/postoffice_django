@@ -2,6 +2,7 @@ SECRET_KEY = 'psst'
 
 DEBUG = True
 USE_TZ = True
+ROOT_URLCONF = 'postoffice_django.urls'
 
 
 DATABASES = {
@@ -11,7 +12,7 @@ DATABASES = {
         'USER': 'postoffice_django',
         'PASSWORD': 'postoffice_django',
         'HOST': 'localhost',
-        'PORT': '6543'
+        'PORT': '6542'
     },
 }
 
