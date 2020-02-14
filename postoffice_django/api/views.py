@@ -5,7 +5,7 @@ from postoffice_django.models import PublishingError
 from postoffice_django.serializers import MessagesSerializer
 
 
-class MessagesView(View):
+class ListMessagesView(View):
     DEFAULT_MAX_RESULTS = 100
 
     def get(self, request, *args, **kwargs):

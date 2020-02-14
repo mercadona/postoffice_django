@@ -3,12 +3,12 @@ from unittest.mock import patch
 
 import pytest
 
-from postoffice_django.api.views import MessagesView
+from postoffice_django.api.views import ListMessagesView
 from postoffice_django.models import PublishingError
 
 
 @pytest.mark.django_db
-class TestMessagesView:
+class TestListMessagesView:
 
     def test_returns_empty_when_no_publishing_errors_exist(self, client):
         response = client.get('/messages/')
@@ -33,7 +33,7 @@ class TestMessagesView:
             'attributes': {'key': 'value'},
         }]
 
-    @patch('postoffice_django.api.views.MessagesView.DEFAULT_MAX_RESULTS', 1)
+    @patch('postoffice_django.api.views.ListMessagesView.DEFAULT_MAX_RESULTS', 1)
     def test_only_default_messages_quantity_returned_when_no_limit_received(
             self, client, publishing_error, older_publishing_error):
         response = client.get('/messages/')
@@ -41,7 +41,7 @@ class TestMessagesView:
         assert response.status_code == 200
         assert len(json.loads(response.content)) == 1
 
-    @patch('postoffice_django.api.views.MessagesView.DEFAULT_MAX_RESULTS', 1)
+    @patch('postoffice_django.api.views.ListMessagesView.DEFAULT_MAX_RESULTS', 1)
     def test_all_publishing_errors_returned_when_bigger_limit_received(
             self, client, publishing_error, older_publishing_error):
         response = client.get('/messages/?limit=10')
