@@ -2,6 +2,7 @@ SECRET_KEY = 'psst'
 
 DEBUG = True
 USE_TZ = True
+ROOT_URLCONF = 'postoffice_django.urls'
 
 
 DATABASES = {
