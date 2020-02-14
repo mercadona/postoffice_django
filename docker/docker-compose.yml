@@ -8,4 +8,4 @@ services:
       - POSTGRES_USER=postoffice_django
       - POSTGRES_DB=postoffice_django
     ports:
-      - "6543:5432"
+      - "6542:5432"

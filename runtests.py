@@ -5,9 +5,6 @@ from __future__ import unicode_literals, absolute_import
 import os
 import sys
 
-import django
-from unittest.mock import patch
-
 
 class PytestTestRunner(object):
     """Runs pytest to discover and run tests."""

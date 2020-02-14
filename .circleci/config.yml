@@ -25,7 +25,7 @@ jobs:
           POSTGRES_USER: postoffice_django
           POSTGRES_DB: postoffice_django
           POSTGRES_PASSWORD: postoffice_django
-        command: -p 6543
+        command: -p 6542
     steps:
       - checkout
       - run:

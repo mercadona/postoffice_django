@@ -17,7 +17,6 @@ class TestPostOfficeHealth:
 
         assert checks.health() is True
 
-
     def test_returns_false_when_postoffice_is_ko(self):
         responses.add(responses.GET, f'{POSTOFFICE_URL}/api/health/',
                       body=json.dumps({'status': 'ko'}))
@@ -37,7 +36,8 @@ class TestPostOfficeHealth:
         assert checks.health() is False
 
     @patch('requests.get')
-    def test_returns_false_when_postoffice_raises_connection_error(self, get_mock):
+    def test_returns_false_when_postoffice_raises_connection_error(
+            self, get_mock):
         get_mock.side_effect = requests.exceptions.ConnectionError()
 
         assert checks.health() is False
