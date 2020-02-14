@@ -1,5 +1,6 @@
-from django.http import JsonResponse
+from django.http import JsonResponse, HttpResponse
 from django.views import View
+from django.views.generic.edit import BaseDeleteView
 
 from postoffice_django.models import PublishingError
 from postoffice_django.serializers import MessagesSerializer
@@ -16,3 +17,12 @@ class ListMessagesView(View):
 
     def _get_max_results(self, request):
         return int(request.GET.get('limit', self.DEFAULT_MAX_RESULTS))
+
+
+class DeleteMessageView(BaseDeleteView):
+    queryset = PublishingError.objects.all()
+
+    def delete(self, request, *args, **kwargs):
+        message = self.get_object()
+        message.delete()
+        return HttpResponse(status=204)
