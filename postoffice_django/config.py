@@ -4,8 +4,10 @@ from http import HTTPStatus
 import requests
 
 from . import settings
-from postoffice_django.exceptions import (BadPublisherCreation,
-    BadTopicCreation)
+from postoffice_django.exceptions import (
+    BadPublisherCreation,
+    BadTopicCreation
+)
 from requests.exceptions import ConnectTimeout, ConnectionError
 
 
