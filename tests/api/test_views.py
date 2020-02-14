@@ -50,3 +50,29 @@ class TestListMessagesView:
         assert response.status_code == 200
         publishing_errors_count = PublishingError.objects.count()
         assert len(json.loads(response.content)) == publishing_errors_count
+
+
+@pytest.mark.django_db
+class TestDeleteMessageView:
+
+    def test_returns_no_content_when_message_is_deleted(
+            self, client, publishing_error):
+        response = client.delete(f'/messages/{publishing_error.id}/')
+
+        assert response.status_code == 204
+        assert response.content == b''
+
+        assert PublishingError.objects.count() == 0
+
+    def test_only_received_message_is_deleted_when_multiple_messages_exist(
+            self, client, publishing_error, older_publishing_error):
+        client.delete(f'/messages/{publishing_error.id}/')
+
+        assert PublishingError.objects.count() == 1
+        assert PublishingError.objects.first() == older_publishing_error
+
+    def test_returns_not_found_when_id_does_not_exist(
+            self, client, publishing_error):
+        response = client.delete('/messages/0/')
+
+        assert response.status_code == 404
