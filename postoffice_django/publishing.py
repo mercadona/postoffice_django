@@ -1,6 +1,6 @@
 import requests
 from requests import Response
-from requests.exceptions import ConnectionError, ConnectTimeout
+from requests.exceptions import ConnectionError, Timeout
 
 from . import settings
 from .models import PublishingError
@@ -21,7 +21,7 @@ def publish(topic: str, payload: dict, **attrs: dict) -> None:
                                  json=message,
                                  timeout=settings.get_timeout()
                                  )
-    except (ConnectTimeout, ConnectionError):
+    except (ConnectionError, Timeout):
         _save_connection_not_established(message)
         return
 
