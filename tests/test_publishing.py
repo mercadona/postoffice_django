@@ -136,7 +136,7 @@ class TestPublishing:
     @patch('postoffice_django.publishing.requests.post')
     def test_save_publishing_error_when_postoffice_raises_timeout(
             self, post_mock):
-        post_mock.side_effect = requests.exceptions.ConnectTimeout()
+        post_mock.side_effect = requests.exceptions.Timeout()
 
         publish(topic='some_topic', payload='some_payload', hive='vlc1')
 
