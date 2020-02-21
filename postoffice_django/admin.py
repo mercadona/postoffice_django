@@ -6,6 +6,8 @@ from .models import PublishingError
 @admin.register(PublishingError)
 class PublishingErrorAdmin(admin.ModelAdmin):
 
+    list_display = ['topic', 'error', 'created_at']
+
     def has_add_permission(self, request, obj=None):
         return False
 
