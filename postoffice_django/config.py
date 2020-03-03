@@ -1,9 +1,11 @@
 import logging
+import requests
 from http import HTTPStatus
 
-import requests
+from django.urls import reverse
 
 from . import settings
+
 from postoffice_django.exceptions import (
     BadPublisherCreation,
     BadTopicCreation
@@ -51,9 +53,12 @@ def _create_publishers(consumer: dict) -> None:
 
 def _create_topic(topic_name: str) -> None:
     url = f'{settings.get_url()}/api/topics/'
-    payload = {'name': topic_name, 'origin_host': settings.get_origin_host()}
+    payload = {'name': topic_name, 'origin_host': _generate_origin_host()}
 
     return _execute_request(url, payload)
+
+def _generate_origin_host() -> str:
+    return settings.get_origin_host() + reverse('postoffice-messages-list')
 
 
 def _execute_request(url: str, payload: dict):

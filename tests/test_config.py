@@ -143,10 +143,12 @@ class TestConfigureTopics:
 
         assert len(responses.calls) == 2
         assert json.loads(responses.calls[0].request.body) == {
-            'name': 'topic_to_be_created', 'origin_host': 'example.com'
+            'name': 'topic_to_be_created',
+            'origin_host': 'example.com/messages/'
         }
         assert json.loads(responses.calls[1].request.body) == {
-            'name': 'another_topic_to_be_created', 'origin_host': 'example.com'
+            'name': 'another_topic_to_be_created',
+            'origin_host': 'example.com/messages/'
         }
 
     def test_raise_exception_when_can_not_create_topics(
@@ -195,8 +197,10 @@ class TestConfigureTopics:
         assert bad_topic_creation_exception.value.message == 'Can not create topic. Topic no created: [\'topic_to_be_created\']'  # noqa
         assert len(responses.calls) == 2
         assert json.loads(responses.calls[0].request.body) == {
-            'name': 'topic_to_be_created', 'origin_host': 'example.com'
+            'name': 'topic_to_be_created',
+            'origin_host': 'example.com/messages/'
         }
         assert json.loads(responses.calls[1].request.body) == {
-            'name': 'another_topic_to_be_created', 'origin_host': 'example.com'
+            'name': 'another_topic_to_be_created',
+            'origin_host': 'example.com/messages/'
         }
