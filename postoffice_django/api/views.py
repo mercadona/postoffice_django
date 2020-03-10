@@ -1,5 +1,7 @@
 from django.http import JsonResponse, HttpResponse
 from django.views import View
+from django.utils.decorators import method_decorator
+from django.views.decorators.csrf import csrf_exempt
 from django.views.generic.edit import BaseDeleteView
 
 from postoffice_django.models import PublishingError
@@ -19,6 +21,7 @@ class ListMessagesView(View):
         return int(request.GET.get('limit', self.DEFAULT_MAX_RESULTS))
 
 
+@method_decorator(csrf_exempt, name='dispatch')
 class DeleteMessageView(BaseDeleteView):
     queryset = PublishingError.objects.all()
 
