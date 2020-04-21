@@ -9,4 +9,3 @@ class Command(BaseCommand):
     def handle(self, *args, **kwargs):
         configure_topics()
         configure_publishers()
-

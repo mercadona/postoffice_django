@@ -4,7 +4,6 @@ from typing import Any, List, Union
 from django.conf import settings
 
 from .exceptions import (
-    ConsumersSettingNotDefined,
     OriginHostSettingNotDefined,
     TopicsSettingNotDefined,
     UrlSettingNotDefined
@@ -26,7 +25,8 @@ def get_consumers() -> List[dict]:
     try:
         return settings.POSTOFFICE['CONSUMERS']
     except KeyError:
-        raise ConsumersSettingNotDefined
+        logger.warning('Consumers config key is missing')
+        return []
 
 
 def get_timeout() -> Union[float, Any]:
