@@ -4,7 +4,6 @@ from typing import Any, List, Union
 from django.conf import settings
 
 from .exceptions import (
-    ConsumersSettingNotDefined,
     OriginHostSettingNotDefined,
     TopicsSettingNotDefined,
     UrlSettingNotDefined
