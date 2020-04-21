@@ -5,7 +5,6 @@ from django.conf import settings
 
 from .exceptions import (
     OriginHostSettingNotDefined,
-    TopicsSettingNotDefined,
     UrlSettingNotDefined
 )
 
@@ -49,4 +48,5 @@ def get_topics() -> List[str]:
     try:
         return settings.POSTOFFICE['TOPICS']
     except KeyError:
-        raise TopicsSettingNotDefined
+        logger.warning('Topics config key is missing')
+        return []
