@@ -57,6 +57,7 @@ def _create_topic(topic_name: str) -> None:
 
     return _execute_request(url, payload)
 
+
 def _generate_origin_host() -> str:
     return settings.get_origin_host() + reverse('postoffice-messages-list')
 
