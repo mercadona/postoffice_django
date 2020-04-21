@@ -1,7 +1,7 @@
+import logging
 import pytest
 
 from postoffice_django.exceptions import (
-    ConsumersSettingNotDefined,
     OriginHostSettingNotDefined,
     TopicsSettingNotDefined,
     UrlSettingNotDefined
@@ -23,12 +23,16 @@ class TestSettings:
         with pytest.raises(UrlSettingNotDefined):
             get_url()
 
-    def test_raise_exception_when_post_office_consumers_is_not_defined(
-            self, settings):
+    def test_returns_empty_list_when_post_office_consumers_is_not_defined(
+            self, settings, caplog):
         del(settings.POSTOFFICE['CONSUMERS'])
 
-        with pytest.raises(ConsumersSettingNotDefined):
-            get_consumers()
+        assert get_consumers() == []
+        assert (
+            'postoffice_django.settings',
+            logging.WARNING,
+            'Consumers config key is missing'
+        ) in caplog.record_tuples
 
     def test_returns_default_timeout_value_when_is_not_defined(
             self, settings):

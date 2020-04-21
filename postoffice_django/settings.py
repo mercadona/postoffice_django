@@ -26,7 +26,8 @@ def get_consumers() -> List[dict]:
     try:
         return settings.POSTOFFICE['CONSUMERS']
     except KeyError:
-        raise ConsumersSettingNotDefined
+        logger.warning('Consumers config key is missing')
+        return []
 
 
 def get_timeout() -> Union[float, Any]:
