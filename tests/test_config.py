@@ -1,4 +1,5 @@
 import json
+import logging
 from unittest.mock import patch
 
 import pytest
@@ -77,7 +78,7 @@ class TestConfigurePublishers:
             configure_publishers()
 
     def test_do_not_raise_exception_when_publisher_already_exists(
-            self, publisher_already_exists):
+            self, publisher_already_exists, caplog):
         responses.add(responses.POST,
                       self.POSTOFFICE_PUBLISHER_CREATION_URL,
                       status=409,
@@ -85,6 +86,12 @@ class TestConfigurePublishers:
                       content_type='application/json')
 
         configure_publishers()
+
+        assert (
+            'postoffice_django.settings',
+            logging.WARNING,
+            'Existing resource'
+        ) in caplog.record_tuples
 
     @patch('postoffice_django.config.requests.post')
     def test_raise_exception_when_postoffice_raises_timeout(
@@ -240,7 +247,8 @@ class TestConfigureTopics:
             'origin_host': 'example.com/messages/'
         }
 
-    def test_do_not_raise_exception_when_topic_already_exists(self, topic_already_exists):
+    def test_do_not_raise_exception_when_topic_already_exists(
+            self, topic_already_exists, caplog):
         responses.add(responses.POST,
                       self.POSTOFFICE_TOPIC_CREATION_URL,
                       status=409,
@@ -248,3 +256,9 @@ class TestConfigureTopics:
                       content_type='application/json')
 
         configure_topics()
+
+        assert (
+            'postoffice_django.settings',
+            logging.WARNING,
+            'Existing resource'
+        ) in caplog.record_tuples

@@ -70,7 +70,11 @@ def _execute_request(url: str, payload: dict) -> bool:
     except (ConnectTimeout, ConnectionError):
         return ConfigurationResponse(report_error=True)
 
-    if response.status_code == HTTPStatus.CREATED or response.status_code == HTTPStatus.CONFLICT:
+    if response.status_code == HTTPStatus.CONFLICT:
+        logger.warning('Existing resource', extra={'url': url, 'payload': payload})
+        return ConfigurationResponse(report_error=False)
+
+    if response.status_code == HTTPStatus.CREATED:
         return ConfigurationResponse(report_error=False)
 
     return ConfigurationResponse(report_error=True)
