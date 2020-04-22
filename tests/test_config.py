@@ -25,6 +25,19 @@ class TestConfigurePublishers:
                 }
             }
         })
+
+    @pytest.fixture
+    def publisher_with_validation_error(self):
+        return json.dumps({
+            'data': {
+                'errors': {
+                    'target': [
+                        'This field is required'
+                    ]
+                }
+            }
+        })
+
     POSTOFFICE_PUBLISHER_CREATION_URL = f'{POSTOFFICE_URL}/api/publishers/'
 
     def test_request_body_sent_to_create_publishers(self):
@@ -53,11 +66,11 @@ class TestConfigurePublishers:
         }
 
     def test_raise_exception_when_can_not_create_publisher(
-            self, publisher_already_exists):
+            self, publisher_with_validation_error):
         responses.add(responses.POST,
                       self.POSTOFFICE_PUBLISHER_CREATION_URL,
                       status=400,
-                      body=publisher_already_exists,
+                      body=publisher_with_validation_error,
                       content_type='application/json')
 
         with pytest.raises(BadPublisherCreation):
@@ -80,11 +93,11 @@ class TestConfigurePublishers:
             configure_publishers()
 
     def test_try_create_all_publishers_when_some_publisher_fails(
-            self, publisher_already_exists):
+            self, publisher_with_validation_error):
         responses.add(responses.POST,
                       self.POSTOFFICE_PUBLISHER_CREATION_URL,
                       status=400,
-                      body=publisher_already_exists,
+                      body=publisher_with_validation_error,
                       content_type='application/json')
         responses.add(responses.POST,
                       self.POSTOFFICE_PUBLISHER_CREATION_URL,
