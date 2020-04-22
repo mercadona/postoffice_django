@@ -204,3 +204,14 @@ class TestConfigureTopics:
             'name': 'another_topic_to_be_created',
             'origin_host': 'example.com/messages/'
         }
+
+    def test_do_not_raise_exception_when_topic_already_exists(self, topic_already_exists):
+        responses.add(responses.POST,
+                      self.POSTOFFICE_TOPIC_CREATION_URL,
+                      status=409,
+                      body=topic_already_exists,
+                      content_type='application/json')
+
+        configure_topics()
+
+        assert True
