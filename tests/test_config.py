@@ -88,7 +88,7 @@ class TestConfigurePublishers:
         configure_publishers()
 
         assert (
-            'postoffice_django.settings',
+            'postoffice_django.config',
             logging.WARNING,
             'Existing resource'
         ) in caplog.record_tuples
@@ -258,7 +258,7 @@ class TestConfigureTopics:
         configure_topics()
 
         assert (
-            'postoffice_django.settings',
+            'postoffice_django.config',
             logging.WARNING,
             'Existing resource'
         ) in caplog.record_tuples
