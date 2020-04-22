@@ -1,4 +1,5 @@
 import json
+import logging
 from unittest.mock import patch
 
 import pytest
@@ -25,6 +26,19 @@ class TestConfigurePublishers:
                 }
             }
         })
+
+    @pytest.fixture
+    def publisher_with_validation_error(self):
+        return json.dumps({
+            'data': {
+                'errors': {
+                    'target': [
+                        'This field is required'
+                    ]
+                }
+            }
+        })
+
     POSTOFFICE_PUBLISHER_CREATION_URL = f'{POSTOFFICE_URL}/api/publishers/'
 
     def test_request_body_sent_to_create_publishers(self):
@@ -53,15 +67,31 @@ class TestConfigurePublishers:
         }
 
     def test_raise_exception_when_can_not_create_publisher(
-            self, publisher_already_exists):
+            self, publisher_with_validation_error):
         responses.add(responses.POST,
                       self.POSTOFFICE_PUBLISHER_CREATION_URL,
                       status=400,
-                      body=publisher_already_exists,
+                      body=publisher_with_validation_error,
                       content_type='application/json')
 
         with pytest.raises(BadPublisherCreation):
             configure_publishers()
+
+    def test_do_not_raise_exception_when_publisher_already_exists(
+            self, publisher_already_exists, caplog):
+        responses.add(responses.POST,
+                      self.POSTOFFICE_PUBLISHER_CREATION_URL,
+                      status=409,
+                      body=publisher_already_exists,
+                      content_type='application/json')
+
+        configure_publishers()
+
+        assert (
+            'postoffice_django.config',
+            logging.WARNING,
+            'Existing resource'
+        ) in caplog.record_tuples
 
     @patch('postoffice_django.config.requests.post')
     def test_raise_exception_when_postoffice_raises_timeout(
@@ -80,11 +110,11 @@ class TestConfigurePublishers:
             configure_publishers()
 
     def test_try_create_all_publishers_when_some_publisher_fails(
-            self, publisher_already_exists):
+            self, publisher_with_validation_error):
         responses.add(responses.POST,
                       self.POSTOFFICE_PUBLISHER_CREATION_URL,
                       status=400,
-                      body=publisher_already_exists,
+                      body=publisher_with_validation_error,
                       content_type='application/json')
         responses.add(responses.POST,
                       self.POSTOFFICE_PUBLISHER_CREATION_URL,
@@ -132,6 +162,18 @@ class TestConfigureTopics:
             }
         })
 
+    @pytest.fixture
+    def topic_with_error_validation(self):
+        return json.dumps({
+            'data': {
+                'errors': {
+                    'name': [
+                        'This field is required'
+                    ]
+                }
+            }
+        })
+
     def test_request_body_sent_to_create_topic(self):
         responses.add(responses.POST,
                       self.POSTOFFICE_TOPIC_CREATION_URL,
@@ -152,11 +194,11 @@ class TestConfigureTopics:
         }
 
     def test_raise_exception_when_can_not_create_topics(
-            self, topic_already_exists):
+            self, topic_with_error_validation):
         responses.add(responses.POST,
                       self.POSTOFFICE_TOPIC_CREATION_URL,
                       status=400,
-                      body=topic_already_exists,
+                      body=topic_with_error_validation,
                       content_type='application/json')
 
         with pytest.raises(BadTopicCreation):
@@ -204,3 +246,19 @@ class TestConfigureTopics:
             'name': 'another_topic_to_be_created',
             'origin_host': 'example.com/messages/'
         }
+
+    def test_do_not_raise_exception_when_topic_already_exists(
+            self, topic_already_exists, caplog):
+        responses.add(responses.POST,
+                      self.POSTOFFICE_TOPIC_CREATION_URL,
+                      status=409,
+                      body=topic_already_exists,
+                      content_type='application/json')
+
+        configure_topics()
+
+        assert (
+            'postoffice_django.config',
+            logging.WARNING,
+            'Existing resource'
+        ) in caplog.record_tuples
