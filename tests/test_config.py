@@ -132,6 +132,18 @@ class TestConfigureTopics:
             }
         })
 
+    @pytest.fixture
+    def topic_with_error_validation(self):
+        return json.dumps({
+            'data': {
+                'errors': {
+                    'name': [
+                        'This field is required'
+                    ]
+                }
+            }
+        })
+
     def test_request_body_sent_to_create_topic(self):
         responses.add(responses.POST,
                       self.POSTOFFICE_TOPIC_CREATION_URL,
@@ -152,11 +164,11 @@ class TestConfigureTopics:
         }
 
     def test_raise_exception_when_can_not_create_topics(
-            self, topic_already_exists):
+            self, topic_with_error_validation):
         responses.add(responses.POST,
                       self.POSTOFFICE_TOPIC_CREATION_URL,
                       status=400,
-                      body=topic_already_exists,
+                      body=topic_with_error_validation,
                       content_type='application/json')
 
         with pytest.raises(BadTopicCreation):
