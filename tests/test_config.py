@@ -76,6 +76,16 @@ class TestConfigurePublishers:
         with pytest.raises(BadPublisherCreation):
             configure_publishers()
 
+    def test_do_not_raise_exception_when_publisher_already_exists(
+            self, publisher_already_exists):
+        responses.add(responses.POST,
+                      self.POSTOFFICE_PUBLISHER_CREATION_URL,
+                      status=409,
+                      body=publisher_already_exists,
+                      content_type='application/json')
+
+        configure_publishers()
+
     @patch('postoffice_django.config.requests.post')
     def test_raise_exception_when_postoffice_raises_timeout(
             self, post_mock):
@@ -238,5 +248,3 @@ class TestConfigureTopics:
                       content_type='application/json')
 
         configure_topics()
-
-        assert True
