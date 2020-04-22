@@ -3,7 +3,6 @@ import pytest
 
 from postoffice_django.exceptions import (
     OriginHostSettingNotDefined,
-    TopicsSettingNotDefined,
     UrlSettingNotDefined
 )
 from postoffice_django.settings import (
@@ -48,8 +47,12 @@ class TestSettings:
             get_origin_host()
 
     def test_raise_exception_when_topics_is_not_defined(
-            self, settings):
+            self, settings, caplog):
         del(settings.POSTOFFICE['TOPICS'])
 
-        with pytest.raises(TopicsSettingNotDefined):
-            get_topics()
+        assert get_topics() == []
+        assert (
+            'postoffice_django.settings',
+            logging.WARNING,
+            'Topics config key is missing'
+        ) in caplog.record_tuples

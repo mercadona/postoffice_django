@@ -8,11 +8,6 @@ class OriginHostSettingNotDefined(Exception):
         self.message = 'ORIGIN_HOST is not defined on settings'
 
 
-class TopicsSettingNotDefined(Exception):
-    def __init__(self):
-        self.message = 'TOPICS is not defined on settings'
-
-
 class BadTopicCreation(Exception):
     def __init__(self, topic_name):
         self.message = (
