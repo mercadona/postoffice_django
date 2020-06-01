@@ -161,3 +161,18 @@ class TestPublishing:
             'Can not establish connection with postoffice')
         assert publishing_error.created_at == datetime.datetime(
             2019, 6, 19, 18, 59, 59, tzinfo=pytz.UTC)
+
+    @patch('postoffice_django.publishing.requests.post')
+    def test_bulk_messages_endpoint_called_when_payload_is_list(
+            self, post_mock):
+        publish(topic='some_topic', payload=[{'key': 'key_1'}])
+
+        post_mock.assert_called_with(
+            'http://fake.service/api/bulk_messages/',
+            json={
+                'topic': 'some_topic',
+                'payload': [{'key': 'key_1'}],
+                'attributes': {}
+            },
+            timeout=0.3
+        )

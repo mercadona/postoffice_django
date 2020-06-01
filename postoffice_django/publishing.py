@@ -1,3 +1,5 @@
+from typing import Union
+
 import requests
 from requests import Response
 from requests.exceptions import ConnectionError, Timeout
@@ -8,8 +10,8 @@ from .models import PublishingError
 CONNECTION_ERROR = 'Can not establish connection with postoffice'
 
 
-def publish(topic: str, payload: dict, **attrs: dict) -> None:
-    url = f'{settings.get_url()}/api/messages/'
+def publish(topic: str, payload: Union[dict, list], **attrs: dict) -> None:
+    url = _get_publish_endpoint(payload)
     message = {
         'topic': topic,
         'payload': payload,
@@ -17,16 +19,21 @@ def publish(topic: str, payload: dict, **attrs: dict) -> None:
     }
 
     try:
-        response = requests.post(url,
-                                 json=message,
-                                 timeout=settings.get_timeout()
-                                 )
+        response = requests.post(
+            url, json=message, timeout=settings.get_timeout())
     except (ConnectionError, Timeout):
         _save_connection_not_established(message)
         return
 
     if response.status_code != 201:
         _save_publishing_error(response, message)
+
+
+def _get_publish_endpoint(payload):
+    if isinstance(payload, list):
+        return f'{settings.get_url()}/api/bulk_messages/'
+
+    return f'{settings.get_url()}/api/messages/'
 
 
 def _stringify_attributes(attributes: dict) -> dict:

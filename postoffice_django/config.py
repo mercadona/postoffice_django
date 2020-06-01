@@ -14,6 +14,7 @@ logger = logging.getLogger(__name__)
 
 ConfigurationResponse = namedtuple('ConfigurationResponse', ['report_error'])
 
+
 def configure_publishers() -> None:
     uncreated_publishers = []
 
@@ -71,7 +72,8 @@ def _execute_request(url: str, payload: dict) -> bool:
         return ConfigurationResponse(report_error=True)
 
     if response.status_code == HTTPStatus.CONFLICT:
-        logger.warning('Existing resource', extra={'url': url, 'payload': payload})
+        logger.warning('Existing resource',
+                       extra={'url': url, 'payload': payload})
         return ConfigurationResponse(report_error=False)
 
     if response.status_code == HTTPStatus.CREATED:
