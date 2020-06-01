@@ -10,7 +10,7 @@ from django.conf import settings
 from freezegun import freeze_time
 
 from postoffice_django.models import PublishingError
-from postoffice_django.publishing import publish
+from postoffice_django.publishing import publish, bulk_publish
 
 POSTOFFICE_URL = settings.POSTOFFICE['URL']
 
@@ -114,6 +114,7 @@ class TestPublishing:
         assert publishing_error.error == 'Internal server error'
         assert publishing_error.created_at == datetime.datetime(
             2019, 6, 19, 18, 59, 59, tzinfo=pytz.UTC)
+        assert not publishing_error.bulk
 
     @freeze_time('2019-06-19 20:59:59+02:00')
     def test_save_publishing_error_when_service_returns_400(
@@ -131,6 +132,7 @@ class TestPublishing:
         assert publishing_error.error == '{\'topic\': [\'is invalid\']}'
         assert publishing_error.created_at == datetime.datetime(
             2019, 6, 19, 18, 59, 59, tzinfo=pytz.UTC)
+        assert not publishing_error.bulk
 
     @freeze_time('2019-06-19 20:59:59+02:00')
     @patch('postoffice_django.publishing.requests.post')
@@ -161,3 +163,54 @@ class TestPublishing:
             'Can not establish connection with postoffice')
         assert publishing_error.created_at == datetime.datetime(
             2019, 6, 19, 18, 59, 59, tzinfo=pytz.UTC)
+
+
+@pytest.mark.django_db
+class TestBulkPublishing:
+
+    @patch('postoffice_django.publishing.requests.post')
+    def test_bulk_messages_endpoint_called_when_calling_bulk_publish(
+            self, post_mock):
+        bulk_publish(
+            topic='some_topic',
+            payload=[{'key': 'key_1'}, {'key': 'key_2'}],
+            hive='vlc1',
+        )
+
+        post_mock.assert_called_with(
+            'http://fake.service/api/bulk_messages/',
+            json=[{
+                'topic': 'some_topic',
+                'payload': {'key': 'key_1'},
+                'attributes': {'hive': 'vlc1'}
+            }, {
+                'topic': 'some_topic',
+                'payload': {'key': 'key_2'},
+                'attributes': {'hive': 'vlc1'}
+            }],
+            timeout=0.3
+        )
+
+    @freeze_time('2019-06-19 20:59:59+02:00')
+    @patch('postoffice_django.publishing.requests.post')
+    def test_save_error_when_connection_error_raised(self, post_mock):
+        post_mock.side_effect = requests.exceptions.ConnectionError()
+
+        bulk_publish(
+            topic='some_topic',
+            payload=[{'key': 'key_1'}, {'key': 'key_2'}],
+            hive='vlc1',
+        )
+
+        assert PublishingError.objects.count() == 1
+        publishing_error = PublishingError.objects.first()
+        assert publishing_error.bulk
+        assert publishing_error.payload == [{
+            'topic': 'some_topic',
+            'payload': {'key': 'key_1'},
+            'attributes': {'hive': 'vlc1'}
+        }, {
+            'topic': 'some_topic',
+            'payload': {'key': 'key_2'},
+            'attributes': {'hive': 'vlc1'}
+        }]
