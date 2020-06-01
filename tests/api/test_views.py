@@ -25,11 +25,29 @@ class TestListMessagesView:
             'topic': 'test-topic',
             'attributes': None,
             'payload': {'approved': True},
+            'bulk': False,
         }, {
             'id': publishing_error.id,
             'topic': 'test',
             'payload': {'key': 'value', 'num': '2.15', 'elements': [1, 2, 3]},
             'attributes': {'key': 'value'},
+            'bulk': False,
+        }]
+
+    def test_returns_bulk_message_when_bulk_publishing_error_exists(
+            self, client, bulk_publishing_error):
+        response = client.get('/messages/')
+
+        assert response.status_code == 200
+        assert json.loads(response.content) == [{
+            'id': bulk_publishing_error.id,
+            'topic': 'test-topic',
+            'attributes': None,
+            'payload': [
+                {'topic': 'test-topic', 'payload': {'approved': True}},
+                {'topic': 'test-topic', 'payload': {'approved': False}},
+            ],
+            'bulk': True,
         }]
 
     @patch(

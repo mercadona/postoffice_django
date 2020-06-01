@@ -23,3 +23,17 @@ def older_publishing_error():
         payload={'approved': True},
         error='Connection error',
     )
+
+
+@pytest.fixture
+@freeze_time('2020-01-28')
+def bulk_publishing_error():
+    return PublishingError.objects.create(
+        topic='test-topic',
+        payload=[
+            {'topic': 'test-topic', 'payload': {'approved': True}},
+            {'topic': 'test-topic', 'payload': {'approved': False}},
+        ],
+        error='Connection error',
+        bulk=True,
+    )
