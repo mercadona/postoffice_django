@@ -10,8 +10,8 @@ from postoffice_django.settings import (
     get_origin_host,
     get_timeout,
     get_topics,
-    get_url
-)
+    get_url,
+    get_bulk_timeout)
 
 
 class TestSettings:
@@ -38,6 +38,22 @@ class TestSettings:
         del(settings.POSTOFFICE['TIMEOUT'])
 
         assert 0.5 == get_timeout()
+
+    def test_returns_float_timeout_when_value_is_string(self, settings):
+        settings.POSTOFFICE['TIMEOUT'] = '0.6'
+
+        assert 0.6 == get_timeout()
+
+    def test_returns_default_bulk_timeout_value_when_is_not_defined(
+            self, settings):
+        del(settings.POSTOFFICE['BULK_TIMEOUT'])
+
+        assert 5 == get_bulk_timeout()
+
+    def test_returns_float_bulk_timeout_when_value_is_string(self, settings):
+        settings.POSTOFFICE['BULK_TIMEOUT'] = '2'
+
+        assert 2 == get_bulk_timeout()
 
     def test_raise_exception_when_origin_host_is_not_defined(
             self, settings):

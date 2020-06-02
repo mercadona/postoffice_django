@@ -18,13 +18,14 @@ def bulk_publish(topic: str, payload: list, **attrs: dict) -> None:
 
 class Publisher:
     URL = 'api/messages/'
+    TIMEOUT = settings.get_timeout()
 
     def __init__(self, topic, payload, bulk=False, **attributes):
         self.url = f'{settings.get_url()}/{self.URL}'
         self.topic = topic
         self.payload = payload
         self.attributes = attributes
-        self.timeout = settings.get_timeout()
+        self.timeout = self.TIMEOUT
         self.bulk = bulk
         self.message = self._create_message()
 
@@ -76,6 +77,7 @@ class Publisher:
 
 class BulkPublisher(Publisher):
     URL = 'api/bulk_messages/'
+    TIMEOUT = settings.get_bulk_timeout()
 
     def __init__(self, topic, payload, **attributes):
         super().__init__(topic=topic, payload=payload, bulk=True, **attributes)

@@ -11,6 +11,7 @@ from .exceptions import (
 logger = logging.getLogger(__name__)
 
 DEFAULT_TIMEOUT = 0.5
+DEFAULT_BULK_TIMEOUT = 5
 
 
 def get_url() -> str:
@@ -30,11 +31,23 @@ def get_consumers() -> List[dict]:
 
 def get_timeout() -> Union[float, Any]:
     try:
-        return settings.POSTOFFICE['TIMEOUT']
+        timeout = settings.POSTOFFICE['TIMEOUT']
+        return float(timeout)
     except KeyError:
         logger.info(
             f'Timeout not defined, using default value: {DEFAULT_TIMEOUT} (s)')
         return DEFAULT_TIMEOUT
+
+
+def get_bulk_timeout() -> Union[float, Any]:
+    try:
+        timeout = settings.POSTOFFICE['BULK_TIMEOUT']
+        return float(timeout)
+    except KeyError:
+        logger.info(
+            'Bulk timeout not defined, '
+            f'using default: {DEFAULT_BULK_TIMEOUT} (s)')
+        return DEFAULT_BULK_TIMEOUT
 
 
 def get_origin_host() -> str:

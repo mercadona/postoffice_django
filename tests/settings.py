@@ -45,5 +45,6 @@ POSTOFFICE = {
         }],
     'TOPICS': ['topic_to_be_created', 'another_topic_to_be_created'],
     'TIMEOUT': 0.3,
+    'BULK_TIMEOUT': 1.2,
     'ORIGIN_HOST': 'example.com'
 }
