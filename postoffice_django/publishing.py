@@ -68,11 +68,14 @@ class Publisher:
     def _create_publishing_error(self, error: str) -> None:
         PublishingError.objects.create(
             topic=self.topic,
-            payload=self.message,
+            payload=self._error_payload(),
             attributes=self.attributes,
             bulk=self.bulk,
             error=error,
         )
+
+    def _error_payload(self):
+        return self.payload
 
 
 class BulkPublisher(Publisher):
@@ -88,3 +91,15 @@ class BulkPublisher(Publisher):
             'payload': message,
             'attributes': self._stringify_attributes()
         } for message in self.payload]
+
+    def _create_publishing_error(self, error: str) -> None:
+        PublishingError.objects.create(
+            topic=self.topic,
+            payload=self.message,
+            attributes=self.attributes,
+            bulk=self.bulk,
+            error=error,
+        )
+
+    def _error_payload(self):
+        return self.message

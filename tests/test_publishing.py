@@ -163,6 +163,7 @@ class TestPublishing:
             'Can not establish connection with postoffice')
         assert publishing_error.created_at == datetime.datetime(
             2019, 6, 19, 18, 59, 59, tzinfo=pytz.UTC)
+        assert publishing_error.payload == 'some_payload'
 
 
 @pytest.mark.django_db
