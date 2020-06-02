@@ -188,7 +188,7 @@ class TestBulkPublishing:
                 'payload': {'key': 'key_2'},
                 'attributes': {'hive': 'vlc1'}
             }],
-            timeout=0.3
+            timeout=1.2
         )
 
     @freeze_time('2019-06-19 20:59:59+02:00')
