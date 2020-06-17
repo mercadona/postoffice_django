@@ -180,15 +180,11 @@ class TestBulkPublishing:
 
         post_mock.assert_called_with(
             'http://fake.service/api/bulk_messages/',
-            json=[{
+            json={
                 'topic': 'some_topic',
-                'payload': {'key': 'key_1'},
+                'payload': [{'key': 'key_1'}, {'key': 'key_2'}],
                 'attributes': {'hive': 'vlc1'}
-            }, {
-                'topic': 'some_topic',
-                'payload': {'key': 'key_2'},
-                'attributes': {'hive': 'vlc1'}
-            }],
+            },
             timeout=1.2
         )
 

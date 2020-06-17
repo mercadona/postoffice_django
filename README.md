@@ -106,7 +106,9 @@ $ ./manage.py configure_postoffice_publishers
 
 ## Sending messages to postoffice
 
-We have the `publish` method from the `publishing` module
+We have two publishers in the `publishing` module
+
+#### Publishing a single message
 
 ```python
 from postoffice_django.publishing import publish
@@ -116,6 +118,32 @@ publish(topic: str, message: dict, **attributes: dict) -> None
 
 - `topic`: Topic name. This topic **must** exist on postoffice to manage the message.
 
-- `message`: Message to be sent. This **must** be a dict.
+- `payload`: Message to be sent. This **must** be a dict.
 
 - `attributes`: Additional attr. All attributes are cast to string when publishing a message.
+
+#### Publishing messages in batches
+
+In case we want to send multiple messages to the same topic, the best way is sending them in batches.
+
+```python
+from postoffice_django.publishing import bulk_publish
+
+def bulk_publish(topic: str, payload: list, **attrs: dict) -> None:
+```
+
+- `topic`: Topic name. This topic **must** exist on postoffice to manage the message.
+
+- `payload`: Message's payloads to be sent. This **must** be a list.
+
+- `attributes`: Additional attr. All attributes are cast to string when publishing a message.
+
+An example:
+
+```python
+bulk_publish('test-topic', [{'message1': 'key1'}, {'message2': 'key2'}], {'additional_key': 1})
+```
+
+This will be handled on Postoffices and we'll actually receive two messages for the same topic
+* `test_topic`, `{'message1': 'key1'}`, `{'additional_key', 1}}`
+* `test_topic`, `{'message2': 'key2'}`, `{'additional_key', 1}}`
