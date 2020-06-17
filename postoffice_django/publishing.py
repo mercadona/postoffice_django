@@ -85,7 +85,7 @@ class BulkPublisher(Publisher):
     def __init__(self, topic, payload, **attributes):
         super().__init__(topic=topic, payload=payload, bulk=True, **attributes)
 
-    def _create_message(self) -> list:
+    def _create_message(self) -> dict:
         return {
             'topic': self.topic,
             'payload': self.payload,
@@ -102,7 +102,7 @@ class BulkPublisher(Publisher):
         )
 
     def _create_failed_message(self) -> list:
-        [{
+        return [{
            'topic': self.topic,
            'attributes': self.attributes,
            'payload': message_payload
