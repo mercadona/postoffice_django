@@ -95,11 +95,18 @@ class BulkPublisher(Publisher):
     def _create_publishing_error(self, error: str) -> None:
         PublishingError.objects.create(
             topic=self.topic,
-            payload=self.message,
+            payload=self._create_failed_message(),
             attributes=self.attributes,
             bulk=self.bulk,
             error=error,
         )
+
+    def _create_failed_message(self) -> list:
+        [{
+           'topic': self.topic,
+           'attributes': self.attributes,
+           'payload': message_payload
+        } for message_payload in self.payload]
 
     def _error_payload(self):
         return self.message
