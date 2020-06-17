@@ -86,11 +86,11 @@ class BulkPublisher(Publisher):
         super().__init__(topic=topic, payload=payload, bulk=True, **attributes)
 
     def _create_message(self) -> list:
-        return [{
+        return {
             'topic': self.topic,
-            'payload': message,
+            'payload': self.payload,
             'attributes': self._stringify_attributes()
-        } for message in self.payload]
+        }
 
     def _create_publishing_error(self, error: str) -> None:
         PublishingError.objects.create(
