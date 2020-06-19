@@ -37,7 +37,7 @@ def configure_topics() -> None:
         raise BadTopicCreation(uncreated_topics)
 
 
-def _create_publishers(consumer: dict) -> None:
+def _create_publishers(consumer: dict) -> ConfigurationResponse:
     url = f'{settings.get_url()}/api/publishers/'
     payload = {
         'active': True,
@@ -47,10 +47,18 @@ def _create_publishers(consumer: dict) -> None:
         'from_now': True
     }
 
+    payload.update(_get_publisher_timeout(consumer))
+
     return _execute_request(url, payload)
 
 
-def _create_topic(topic_name: str) -> None:
+def _get_publisher_timeout(consumer: dict) -> dict:
+    if not consumer.get('timeout'):
+        return {}
+    return {'seconds_timeout': consumer.get('timeout')}
+
+
+def _create_topic(topic_name: str) -> ConfigurationResponse:
     url = f'{settings.get_url()}/api/topics/'
     payload = {'name': topic_name, 'origin_host': _generate_origin_host()}
 
@@ -61,7 +69,7 @@ def _generate_origin_host() -> str:
     return settings.get_origin_host() + reverse('postoffice-messages-list')
 
 
-def _execute_request(url: str, payload: dict) -> bool:
+def _execute_request(url: str, payload: dict) -> ConfigurationResponse:
     try:
         response = requests.post(
             url,

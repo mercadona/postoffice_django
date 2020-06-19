@@ -35,6 +35,7 @@ POSTOFFICE = {
             'topic': 'some_topic',
             'target': 'http://www.some_url.com',
             'type': 'http',
+            'timeout': 20,
             'from_now': True
         },
         {
