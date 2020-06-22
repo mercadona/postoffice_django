@@ -68,6 +68,7 @@ POSTOFFICE = {
             'from_now': False
         }],
     'TIMEOUT': 0.3,
+    'BULK_TIMEOUT': 5,
     'ORIGIN_HOST': 'example.com',
     'TOPICS': ['topic_to_create', 'another_topic_to_create']
 }
@@ -82,7 +83,11 @@ POSTOFFICE = {
 
     - `type`: http/pubsub
     
+    - `timeout`: Seconds Postoffice should wait before cancelling the request. [Optional] 
+    
 - `TIMEOUT`: Specific timeout to use in every communication with Postoffice. If not specified, the default value is 0.5 seconds.
+
+- `BULK_TIMEOUT`: Specific timeout to use when sending bulk messages to Postoffice. If not specified, the default value is 5 seconds.
 
 - `ORIGIN_HOST`: The host from where the topic is created (your host).  It is necessary in order to `postoffice` know where the topic come from.
 

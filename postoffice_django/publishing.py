@@ -85,13 +85,6 @@ class BulkPublisher(Publisher):
     def __init__(self, topic, payload, **attributes):
         super().__init__(topic=topic, payload=payload, bulk=True, **attributes)
 
-    def _create_message(self) -> dict:
-        return {
-            'topic': self.topic,
-            'payload': self.payload,
-            'attributes': self._stringify_attributes()
-        }
-
     def _create_publishing_error(self, error: str) -> None:
         PublishingError.objects.create(
             topic=self.topic,
@@ -103,9 +96,9 @@ class BulkPublisher(Publisher):
 
     def _create_failed_message(self) -> list:
         return [{
-           'topic': self.topic,
-           'attributes': self.attributes,
-           'payload': message_payload
+            'topic': self.topic,
+            'attributes': self.attributes,
+            'payload': message_payload
         } for message_payload in self.payload]
 
     def _error_payload(self):

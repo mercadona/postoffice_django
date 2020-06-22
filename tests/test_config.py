@@ -56,6 +56,7 @@ class TestConfigurePublishers:
             'target': 'http://www.some_url.com',
             'topic': 'some_topic',
             'type': 'http',
+            'seconds_timeout': 20,
             'from_now': True
         }
         assert json.loads(responses.calls[1].request.body) == {
@@ -127,7 +128,7 @@ class TestConfigurePublishers:
             configure_publishers()
 
         assert bad_publisher_creation_exception.value.message == (
-            'Can not create publisher. Publisher not created: [{\'topic\': \'some_topic\', \'target\': \'http://www.some_url.com\', \'type\': \'http\', \'from_now\': True}]'  # noqa
+            'Can not create publisher. Publisher not created: [{\'topic\': \'some_topic\', \'target\': \'http://www.some_url.com\', \'type\': \'http\', \'timeout\': 20, \'from_now\': True}]'  # noqa
         )
         assert len(responses.calls) == 2
         assert json.loads(responses.calls[0].request.body) == {
@@ -135,6 +136,7 @@ class TestConfigurePublishers:
             'target': 'http://www.some_url.com',
             'topic': 'some_topic',
             'type': 'http',
+            'seconds_timeout': 20,
             'from_now': True
         }
         assert json.loads(responses.calls[1].request.body) == {
