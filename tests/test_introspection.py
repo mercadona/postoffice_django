@@ -11,7 +11,7 @@ class TestIsPostOfficeDjangoImported:
     
     class TestFilesWithImportStatements:
 
-        def test_imported_when_postoffice_django_appears_in_import_statement(self):
+        def test_imported_when_postoffice_django_is_imported(self):
             file_content = (
                 'import django\n'
                 'import postoffice_django\n'
@@ -20,7 +20,7 @@ class TestIsPostOfficeDjangoImported:
 
             assert is_postoffice_django_imported(file_content)
 
-        def test_imported_when_postoffice_django_is_aliased_in_import_statement(self):
+        def test_imported_when_postoffice_django_is_imported_with_alias(self):
             file_content = (
                 'import django\n'
                 'import postoffice_django as po\n'
