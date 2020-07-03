@@ -12,17 +12,29 @@ class TestIsPostOfficeDjangoImported:
     class TestFilesWithImportStatements:
 
         def test_imported_when_postoffice_django_appears_in_import_statement(self):
-            file_content = 'import postoffice_django'
+            file_content = (
+                'import django\n'
+                'import postoffice_django\n'
+                'import rest_framework\n'
+            )
 
             assert is_postoffice_django_imported(file_content)
 
         def test_imported_when_postoffice_django_submodule_is_imported(self):
-            file_content = 'import postoffice_django.publishing'
+            file_content = (
+                'import django\n'
+                'import postoffice_django.publishing\n'
+                'import rest_framework\n'
+            )
 
             assert is_postoffice_django_imported(file_content)
 
         def test_not_imported_when_module_contains_other_import_statements(self):
-            file_content = 'import datetime'
+            file_content = (
+                'import collections\n'
+                'import datetime\n'
+                'import functools\n'
+            )
 
             assert not is_postoffice_django_imported(file_content)
 
