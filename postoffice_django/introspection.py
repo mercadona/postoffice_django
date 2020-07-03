@@ -12,6 +12,9 @@ def is_postoffice_django_imported(file_content: str) -> bool:
             if any(map(_is_postoffice_django_at_root_level, imported_module_names)):
                 return True
 
+        if isinstance(node, ast.ImportFrom) and _is_postoffice_django_at_root_level(node.module):
+            return True
+
     return False
 
 def _is_postoffice_django_at_root_level(imported_module_name: str) -> bool:
