@@ -3,12 +3,12 @@ from postoffice_django.introspection import is_postoffice_django_imported
 
 class TestIsPostOfficeDjangoImported:
 
-    def test_returns_false_when_empty_file(self):
+    def test_not_imported_when_empty_file(self):
         file_content = ''
 
         assert not is_postoffice_django_imported(file_content)
 
-    def test_returns_true_when_postoffice_django_appears_in_import_statement(self):
+    def test_imported_when_postoffice_django_appears_in_import_statement(self):
         file_content = 'import postoffice_django'
 
         assert is_postoffice_django_imported(file_content)
