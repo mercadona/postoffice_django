@@ -1,4 +1,7 @@
+import json
+
 import requests
+from django.core.serializers.json import DjangoJSONEncoder
 from requests import Response
 from requests.exceptions import ConnectionError, Timeout
 
@@ -31,8 +34,9 @@ class Publisher:
 
     def publish(self):
         try:
+            message = json.dumps(self.message, cls=DjangoJSONEncoder)
             response = requests.post(
-                self.url, json=self.message, timeout=self.timeout)
+                self.url, data=message, headers={'Content-Type': 'application/json'}, timeout=self.timeout)
         except (ConnectionError, Timeout):
             self._save_connection_not_established()
             return
