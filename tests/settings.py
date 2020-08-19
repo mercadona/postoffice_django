@@ -36,6 +36,7 @@ POSTOFFICE = {
             'target': 'http://www.some_url.com',
             'type': 'http',
             'timeout': 20,
+            'retry': 60,
             'from_now': True
         },
         {
