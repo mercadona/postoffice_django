@@ -47,15 +47,25 @@ def _create_publishers(consumer: dict) -> ConfigurationResponse:
         'from_now': True
     }
 
-    payload.update(_get_publisher_timeout(consumer))
+    payload.update(_get_optional_args(consumer))
 
     return _execute_request(url, payload)
+
+
+def _get_optional_args(consumer: dict) -> dict:
+    return {**_get_publisher_retry(consumer), **_get_publisher_timeout(consumer)}
 
 
 def _get_publisher_timeout(consumer: dict) -> dict:
     if not consumer.get('timeout'):
         return {}
     return {'seconds_timeout': consumer.get('timeout')}
+
+
+def _get_publisher_retry(consumer: dict) -> dict:
+    if not consumer.get('retry'):
+        return {}
+    return {'seconds_retry': consumer.get('retry')}
 
 
 def _create_topic(topic_name: str) -> ConfigurationResponse:
