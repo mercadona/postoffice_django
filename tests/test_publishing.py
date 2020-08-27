@@ -74,18 +74,21 @@ class TestPublishing:
                       content_type='application/json')
 
         publish(topic='some_topic',
-                payload={'key': 'value'},
+                payload={'key': 'value', 'occurred_at': datetime.datetime(2020, 8, 5, 12, 3, tzinfo=pytz.utc)},
                 number=1,
                 boolean=False)
 
-        assert json.loads(responses.calls[0].request.body) == {
+        request = responses.calls[0].request
+
+        assert json.loads(request.body) == {
             'topic': 'some_topic',
-            'payload': {'key': 'value'},
+            'payload': {'key': 'value', 'occurred_at': '2020-08-05T12:03:00Z'},
             'attributes': {
                 'number': '1',
                 'boolean': 'False'
             }
         }
+        assert request.headers['Content-Type'] == 'application/json'
 
     def test_do_not_save_publishing_error_when_service_success(
             self, postoffice_valid_response):
@@ -172,6 +175,13 @@ class TestBulkPublishing:
     @patch('postoffice_django.publishing.requests.post')
     def test_bulk_messages_endpoint_called_when_calling_bulk_publish(
             self, post_mock):
+        expected_data = (
+            '{'
+            '"topic": "some_topic", '
+            '"payload": [{"key": "key_1"}, {"key": "key_2"}], '
+            '"attributes": {"hive": "vlc1"}'
+            '}'
+        )
         bulk_publish(
             topic='some_topic',
             payload=[{'key': 'key_1'}, {'key': 'key_2'}],
@@ -180,11 +190,8 @@ class TestBulkPublishing:
 
         post_mock.assert_called_with(
             'http://fake.service/api/bulk_messages/',
-            json={
-                'topic': 'some_topic',
-                'payload': [{'key': 'key_1'}, {'key': 'key_2'}],
-                'attributes': {'hive': 'vlc1'}
-            },
+            data=expected_data,
+            headers={'Content-Type': 'application/json'},
             timeout=1.2
         )
 
