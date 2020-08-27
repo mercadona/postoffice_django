@@ -172,6 +172,10 @@ class TestPublishing:
 @pytest.mark.django_db
 class TestBulkPublishing:
 
+    @pytest.fixture
+    def postoffice_valid_response(self):
+        return json.dumps({'public_id': '12345'})
+
     @patch('postoffice_django.publishing.requests.post')
     def test_bulk_messages_endpoint_called_when_calling_bulk_publish(
             self, post_mock):
@@ -236,3 +240,14 @@ class TestBulkPublishing:
         )
 
         assert post_mock.call_count == 2
+        # TODO assert about the calls
+
+    def test_send_bulk_messages_saves_error_messages(
+            self, postoffice_valid_response):
+        responses.add(
+            responses.POST,
+            self.POSTOFFICE_PUBLISH_MESSAGE_URL,
+            status=201,
+            body=postoffice_valid_response,
+            content_type='application/json')
+
