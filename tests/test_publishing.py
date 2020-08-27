@@ -218,3 +218,21 @@ class TestBulkPublishing:
             'payload': {'key': 'key_2'},
             'attributes': {'hive': 'vlc1'}
         }]
+
+    @patch('postoffice_django.publishing.requests.post')
+    def test_send_bulk_messages_in_chunk(self, post_mock, settings):
+        settings.POSTOFFICE['BULK_MESSAGES_CHUNK'] = '3'
+        payload = [
+            {'key': 'key_1'},
+            {'key': 'key_2'},
+            {'key': 'key_3'},
+            {'key': 'key_4'}
+        ]
+
+        bulk_publish(
+            topic='some_topic',
+            payload=payload,
+            hive='vlc1',
+        )
+
+        assert post_mock.call_count == 2
