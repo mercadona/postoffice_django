@@ -16,7 +16,17 @@ def publish(topic: str, payload: dict, **attrs: dict) -> None:
 
 
 def bulk_publish(topic: str, payload: list, **attrs: dict) -> None:
-    BulkPublisher(topic, payload, **attrs).publish()
+    chunked_payload = _generate_chunks(payload)
+
+    for payload in chunked_payload:
+        BulkPublisher(topic, payload, **attrs).publish()
+
+def _generate_chunks(payload):
+    messages_by_chunk = 3  # COJER ESTO DE LA VARIABLE DE ENTORNO
+    return ([
+        payload[message:message + messages_by_chunk]
+        for message in range(0, len(payload), messages_by_chunk)
+    ])
 
 
 class Publisher:
@@ -88,18 +98,6 @@ class BulkPublisher(Publisher):
 
     def __init__(self, topic, payload, **attributes):
         super().__init__(topic=topic, payload=payload, bulk=True, **attributes)
-
-    def publish(self):
-        chunked_messages = self._generate_chunks()
-        for message in chunked_messages:
-            super().publish()
-
-    def _generate_chunks(self):
-        messages_by_chunk = 3  # COJER ESTO DE LA VARIABLE DE ENTORNO
-        return ([
-            self.payload[message:message + messages_by_chunk]
-            for message in range(0, len(self.payload), messages_by_chunk)
-        ])
 
     def _create_publishing_error(self, error: str) -> None:
         PublishingError.objects.create(
