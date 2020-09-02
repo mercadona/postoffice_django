@@ -1,6 +1,6 @@
 import datetime
 import json
-from unittest.mock import patch
+from unittest.mock import patch, call
 
 import pytest
 import pytz
@@ -172,32 +172,56 @@ class TestPublishing:
 @pytest.mark.django_db
 class TestBulkPublishing:
 
+    POSTOFFICE_PUBLISH_MESSAGE_URL = f'{POSTOFFICE_URL}/api/bulk_messages/'
+
     @pytest.fixture
     def postoffice_valid_response(self):
         return json.dumps({'public_id': '12345'})
 
     @patch('postoffice_django.publishing.requests.post')
-    def test_bulk_messages_endpoint_called_when_calling_bulk_publish(
-            self, post_mock):
-        expected_data = (
-            '{'
-            '"topic": "some_topic", '
-            '"payload": [{"key": "key_1"}, {"key": "key_2"}], '
-            '"attributes": {"hive": "vlc1"}'
-            '}'
-        )
+    def test_bulk_messages_endpoint_called_when_calling_bulk_publish_using_chunks(
+            self, post_mock, settings):
+        settings.POSTOFFICE['BULK_MESSAGES_CHUNK'] = '3'
+        payload = [
+            {'key': 'key_1'},
+            {'key': 'key_2'},
+            {'key': 'key_3'},
+            {'key': 'key_4'}
+        ]
+
+        first_expected_payload = json.dumps({
+            'topic': 'some_topic',
+            'payload': [{'key': 'key_1'}, {'key': 'key_2'}, {'key': 'key_3'}],
+            'attributes': {'hive': 'vlc1'}})
+
+        second_expected_payload = json.dumps({
+            'topic': 'some_topic',
+            'payload': [{'key': 'key_4'}],
+            'attributes': {'hive': 'vlc1'}})
+
+        expectd_calls = [
+            call(
+                'http://fake.service/api/bulk_messages/',
+                data=first_expected_payload,
+                headers={'Content-Type': 'application/json'},
+                timeout=1.2
+            ),
+            call(
+                'http://fake.service/api/bulk_messages/',
+                data=second_expected_payload,
+                headers={'Content-Type': 'application/json'},
+                timeout=1.2
+            )
+        ]
+
         bulk_publish(
             topic='some_topic',
-            payload=[{'key': 'key_1'}, {'key': 'key_2'}],
+            payload=payload,
             hive='vlc1',
         )
 
-        post_mock.assert_called_with(
-            'http://fake.service/api/bulk_messages/',
-            data=expected_data,
-            headers={'Content-Type': 'application/json'},
-            timeout=1.2
-        )
+        assert post_mock.call_count == 2
+        post_mock.assert_has_calls(expectd_calls, any_order=True)
 
     @freeze_time('2019-06-19 20:59:59+02:00')
     @patch('postoffice_django.publishing.requests.post')
@@ -223,7 +247,17 @@ class TestBulkPublishing:
             'attributes': {'hive': 'vlc1'}
         }]
 
-    def test_send_bulk_messages_in_chunk(self, settings):
+    def test_does_not_create_publishing_error_when_succeed(self, settings):
+        postoffice_bulk_messages_valid_response = {
+            "result": "bulk messages processed"
+        }
+
+        responses.add(responses.POST,
+                      self.POSTOFFICE_PUBLISH_MESSAGE_URL,
+                      status=201,
+                      body=json.dumps(postoffice_bulk_messages_valid_response),
+                      content_type='application/json')
+
         settings.POSTOFFICE['BULK_MESSAGES_CHUNK'] = '3'
         payload = [
             {'key': 'key_1'},
@@ -239,7 +273,6 @@ class TestBulkPublishing:
         )
 
         assert PublishingError.objects.count() == 0
-
 
     # def test_send_bulk_messages_saves_error_messages(
     #         self, postoffice_valid_response):
