@@ -27,7 +27,7 @@ class Publisher:
         self.url = f'{settings.get_url()}/{self.URL}'
         self.topic = topic
         self.payload = payload
-        self.attributes = attributes
+        self.attributes = self._stringify(attributes)
         self.timeout = self.TIMEOUT
         self.bulk = bulk
         self.message = self._create_message()
@@ -48,11 +48,10 @@ class Publisher:
         return {
             'topic': self.topic,
             'payload': self.payload,
-            'attributes': self._stringify_attributes()
+            'attributes': self.attributes,
         }
 
-    def _stringify_attributes(self) -> dict:
-        attributes = self.attributes
+    def _stringify(self, attributes) -> dict:
         return {key: str(attributes[key]) for key in attributes.keys()}
 
     def _save_connection_not_established(self) -> None:
