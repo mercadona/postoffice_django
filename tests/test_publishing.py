@@ -110,7 +110,8 @@ class TestPublishing:
                       body=json.dumps(''),
                       content_type='application/json')
 
-        publish(topic='some_topic', payload='some_payload', hive='vlc1')
+        publish(topic='some_topic', payload='some_payload',
+                hive='vlc1', published_at=12345.0)
 
         publishing_error = PublishingError.objects.first()
         assert PublishingError.objects.count() == 1
@@ -118,6 +119,9 @@ class TestPublishing:
         assert publishing_error.created_at == datetime.datetime(
             2019, 6, 19, 18, 59, 59, tzinfo=pytz.UTC)
         assert not publishing_error.bulk
+        assert publishing_error.payload == 'some_payload'
+        assert publishing_error.attributes == {
+            'hive': 'vlc1', 'published_at': '12345.0'}
 
     @freeze_time('2019-06-19 20:59:59+02:00')
     def test_save_publishing_error_when_service_returns_400(
