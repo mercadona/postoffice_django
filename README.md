@@ -111,7 +111,7 @@ $ ./manage.py configure_postoffice_publishers
 
 ## Sending messages to postoffice
 
-We have two three in the `publishing` module
+We have three publishers in the `publishing` module
 
 #### Publishing a single message
 
