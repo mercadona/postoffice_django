@@ -111,7 +111,7 @@ $ ./manage.py configure_postoffice_publishers
 
 ## Sending messages to postoffice
 
-We have two publishers in the `publishing` module
+We have two three in the `publishing` module
 
 #### Publishing a single message
 
@@ -126,6 +126,21 @@ publish(topic: str, message: dict, **attributes: dict) -> None
 - `payload`: Message to be sent. This **must** be a dict.
 
 - `attributes`: Additional attr. All attributes are cast to string when publishing a message.
+
+
+##### Scheduling messages to be published in the future
+In cases where you want to publish a message to PostOffice now, but would like to receive it in the future, you can schedule the message 
+```python
+from postoffice_django.publishing import scheduled_publish
+
+scheduled_publish(topic: str, message: dict, schedule_in: int, **attributes: dict) -> None
+```
+
+The only difference with the `publish` method, is that it receives a new param:
+
+- `schedule_in`: The amount of **minutes** in the future when you want to receive the message.
+
+_Disclaimer: If the message cannot be published to PostOffice and is inserted as a PublishingError, it will not be scheduled as of right now. Please take this into consideration._
 
 #### Publishing messages in batches
 

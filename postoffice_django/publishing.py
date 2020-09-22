@@ -1,7 +1,9 @@
 import json
+from datetime import timedelta
 
 import requests
 from django.core.serializers.json import DjangoJSONEncoder
+from django.utils import timezone
 from requests import Response
 from requests.exceptions import ConnectionError, Timeout
 
@@ -17,6 +19,10 @@ def publish(topic: str, payload: dict, **attrs: dict) -> None:
 
 def bulk_publish(topic: str, payload: list, **attrs: dict) -> None:
     BulkPublisher(topic, payload, **attrs).publish()
+
+
+def scheduled_publish(topic: str, payload: dict, schedule_in: int, **attrs: dict) -> None:
+    ScheduledPublisher(topic, payload, schedule_in, **attrs).publish()
 
 
 class Publisher:
@@ -106,3 +112,16 @@ class BulkPublisher(Publisher):
 
     def _error_payload(self):
         return self.message
+
+
+class ScheduledPublisher(Publisher):
+    URL = 'api/schedule_messages/'
+
+    def __init__(self, topic, payload, schedule_in, **attributes):
+        self.schedule_in = schedule_in
+        super().__init__(topic=topic, payload=payload, **attributes)
+
+    def _create_message(self) -> dict:
+        message = super()._create_message()
+        message['schedule_at'] = timezone.now() + timedelta(minutes=self.schedule_in)
+        return message
