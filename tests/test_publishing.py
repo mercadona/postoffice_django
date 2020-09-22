@@ -10,7 +10,7 @@ from django.conf import settings
 from freezegun import freeze_time
 
 from postoffice_django.models import PublishingError
-from postoffice_django.publishing import publish, bulk_publish
+from postoffice_django.publishing import publish, bulk_publish, scheduled_publish
 
 POSTOFFICE_URL = settings.POSTOFFICE['URL']
 
@@ -222,3 +222,52 @@ class TestBulkPublishing:
             'payload': {'key': 'key_2'},
             'attributes': {'hive': 'vlc1'}
         }]
+
+
+@pytest.mark.django_db
+class TestScheduledPublishing:
+
+    @patch('postoffice_django.publishing.requests.post')
+    @freeze_time('2020-09-22 07:00:00+00:00')
+    def test_schedule_messages_endpoint_called_when_calling_schedule_publish(self, post_mock):
+        expected_data = (
+            '{'
+            '"topic": "some_topic", '
+            '"payload": {"key": "key_1"}, '
+            '"attributes": {"hive": "vlc1"}, '
+            '"schedule_at": "2020-09-22T07:15:00Z"'
+            '}'
+        )
+        scheduled_publish(
+            topic='some_topic',
+            payload={'key': 'key_1'},
+            schedule_in=15,
+            **{'hive': 'vlc1'},
+        )
+
+        post_mock.assert_called_with(
+            'http://fake.service/api/schedule_messages/',
+            data=expected_data,
+            headers={'Content-Type': 'application/json'},
+            timeout=0.3,
+        )
+
+    @freeze_time('2020-09-22 07:00:00+00:00')
+    @patch('postoffice_django.publishing.requests.post')
+    def test_save_error_when_connection_error_raised(self, post_mock):
+        post_mock.side_effect = requests.exceptions.ConnectionError()
+
+        scheduled_publish(
+            topic='some_topic',
+            payload={'key': 'key_1'},
+            schedule_in=15,
+            **{'hive': 'vlc1'},
+        )
+
+        assert PublishingError.objects.count() == 1
+        publishing_error = PublishingError.objects.first()
+        assert not publishing_error.bulk
+        assert publishing_error.payload == {'key': 'key_1'}
+        assert publishing_error.topic == 'some_topic'
+        assert publishing_error.attributes == {'hive': 'vlc1'}
+        assert publishing_error.created_at == datetime.datetime(2020, 9, 22, 7, 0, 0, tzinfo=pytz.UTC)
