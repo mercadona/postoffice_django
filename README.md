@@ -182,9 +182,15 @@ This will be handled on Postoffices and we'll actually receive two messages for 
 
 ## How to contribute
 
+### Implement
+
 1. `make install-test-requirements`
 1. `make env-start`
 1. Write a test.
 1. `make test`
 1. Implement up to the test are green.
 1. Repeat.
+
+### Deploy
+
+1. `make deploy VERSION=1.0.0`
