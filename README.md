@@ -93,6 +93,17 @@ POSTOFFICE = {
 
 - `TOPICS`: Topics to be created in order to send messages to `postoffice`
 
+
+Finally add `postoffice` path in your django urls file:
+
+```python
+urlpatterns = [
+    path('admin/', admin.site.urls),
+    path('health/', include('service.health.urls')),
+    path('postoffice/', include('postoffice_django.urls'))
+]
+```
+
 ## How to setup Postoffice via django commands
 
 Now we are ready to start sending messages to `postoffice`. But first, we must generate `topics` and/or `publishers` in postoffice depending on the purpose of the project with postoffice.
