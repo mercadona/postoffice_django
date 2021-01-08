@@ -178,3 +178,13 @@ bulk_publish('test-topic', [{'message1': 'key1'}, {'message2': 'key2'}], {'addit
 This will be handled on Postoffices and we'll actually receive two messages for the same topic
 * `test_topic`, `{'message1': 'key1'}`, `{'additional_key', 1}}`
 * `test_topic`, `{'message2': 'key2'}`, `{'additional_key', 1}}`
+
+
+## How to contribute
+
+1. `make install-test-requirements`
+1. `make env-start`
+1. Write a test.
+1. `make test`
+1. Implement up to the test are green.
+1. Repeat.
