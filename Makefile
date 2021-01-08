@@ -23,7 +23,7 @@ test: ## Run the test suite. Make sure you run make env-start first.
 	python runtests.py
 
 distribute: ## Tag and push a version. Usage: make distribute VERSION=1.0.0
-	git tag "$(VERSION)" && git push origin --tags
+	git tag "$(VERSION)" && git push --tags
 
 help: ## Display this help text
 	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | sort | awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m%-30s\033[0m %s\n", $$1, $$2}'
