@@ -172,6 +172,38 @@ class TestPublishing:
             2019, 6, 19, 18, 59, 59, tzinfo=pytz.UTC)
         assert publishing_error.payload == 'some_payload'
 
+    @freeze_time('2019-06-19 20:59:59+02:00')
+    @patch('postoffice_django.publishing.requests.post')
+    def test_save_publishing_error_with_datetimes_when_postofice_raises_connection_error(
+        self, post_mock
+    ):
+        post_mock.side_effect = requests.exceptions.ConnectionError()
+
+        custom_datetime = '2019-06-19 19:00:00+00:00'
+
+        payload = {
+            'what': 'something happened',
+            'when': datetime.datetime.fromisoformat(custom_datetime)
+        }
+
+        publish(
+            topic='some_topic',
+            payload=payload,
+            hive='vlc1',
+            custom_published_at=datetime.datetime.fromisoformat(custom_datetime)
+        )
+
+        publishing_error = PublishingError.objects.first()
+        assert PublishingError.objects.count() == 1
+        assert publishing_error.error == 'Can not establish connection with postoffice'
+        assert publishing_error.created_at == datetime.datetime(
+            2019, 6, 19, 18, 59, 59, tzinfo=pytz.UTC)
+        assert publishing_error.attributes['custom_published_at'] == custom_datetime
+        assert publishing_error.payload == {
+            'what': 'something happened',
+            'when': '2019-06-19T19:00:00Z'
+        }
+
 
 @pytest.mark.django_db
 class TestBulkPublishing:
