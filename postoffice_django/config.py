@@ -23,7 +23,9 @@ def configure_publishers() -> None:
             uncreated_publishers.append(consumer)
 
     if uncreated_publishers:
-        raise BadPublisherCreation(uncreated_publishers)
+        logger.warning('Publisher cannot be created',
+                       extra={'uncreated_publishers': uncreated_publishers})
+        return ConfigurationResponse(report_error=False)
 
 
 def configure_topics() -> None:
