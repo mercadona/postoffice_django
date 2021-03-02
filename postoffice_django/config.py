@@ -6,8 +6,6 @@ import requests
 from django.urls import reverse
 from requests.exceptions import ConnectionError, ConnectTimeout
 
-from postoffice_django.exceptions import BadPublisherCreation, BadTopicCreation
-
 from . import settings
 
 logger = logging.getLogger(__name__)
@@ -23,7 +21,8 @@ def configure_publishers() -> None:
             uncreated_publishers.append(consumer)
 
     if uncreated_publishers:
-        raise BadPublisherCreation(uncreated_publishers)
+        logger.error('Publisher cannot be created',
+                     extra={'uncreated_publishers': uncreated_publishers})
 
 
 def configure_topics() -> None:
@@ -34,7 +33,8 @@ def configure_topics() -> None:
             uncreated_topics.append(topic)
 
     if uncreated_topics:
-        raise BadTopicCreation(uncreated_topics)
+        logger.error('Topic cannot be created',
+                     extra={'uncreated_topics': uncreated_topics})
 
 
 def _create_publishers(consumer: dict) -> ConfigurationResponse:
