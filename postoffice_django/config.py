@@ -25,7 +25,6 @@ def configure_publishers() -> None:
     if uncreated_publishers:
         logger.warning('Publisher cannot be created',
                        extra={'uncreated_publishers': uncreated_publishers})
-        return ConfigurationResponse(report_error=False)
 
 
 def configure_topics() -> None:
@@ -38,7 +37,6 @@ def configure_topics() -> None:
     if uncreated_topics:
         logger.warning('Topic cannot be created',
                        extra={'uncreated_topics': uncreated_topics})
-        return ConfigurationResponse(report_error=False)
 
 
 def _create_publishers(consumer: dict) -> ConfigurationResponse:
