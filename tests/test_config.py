@@ -126,7 +126,7 @@ class TestConfigurePublishers:
             'Publisher cannot be created'
         ) in caplog.record_tuples
 
-    def test_do_not_try_create_all_publishers_when_some_publisher_fails(
+    def test_try_create_all_publishers_when_some_publisher_fails(
             self, publisher_with_validation_error, caplog):
         responses.add(responses.POST,
                       self.POSTOFFICE_PUBLISHER_CREATION_URL,
