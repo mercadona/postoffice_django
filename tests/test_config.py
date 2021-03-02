@@ -213,35 +213,50 @@ class TestConfigureTopics:
             'origin_host': 'example.com/messages/'
         }
 
-    def test_raise_exception_when_can_not_create_topics(
-            self, topic_with_error_validation):
+    def test_do_not_raise_exception_when_can_not_create_topics(
+            self, topic_with_error_validation, caplog):
         responses.add(responses.POST,
                       self.POSTOFFICE_TOPIC_CREATION_URL,
                       status=400,
                       body=topic_with_error_validation,
                       content_type='application/json')
 
-        with pytest.raises(BadTopicCreation):
-            configure_topics()
+        configure_topics()
+
+        assert (
+            'postoffice_django.config',
+            logging.WARNING,
+            'Topic cannot be created'
+        ) in caplog.record_tuples
 
     @patch('postoffice_django.config.requests.post')
     def test_raise_exception_when_postoffice_raises_timeout(
-            self, post_mock):
+            self, post_mock, caplog):
         post_mock.side_effect = requests.exceptions.ConnectTimeout()
 
-        with pytest.raises(BadTopicCreation):
-            configure_topics()
+        configure_topics()
+
+        assert (
+            'postoffice_django.config',
+            logging.WARNING,
+            'Topic cannot be created'
+        ) in caplog.record_tuples
 
     @patch('postoffice_django.config.requests.post')
     def test_raise_exception_when_postoffice_raises_connection_error(
-            self, post_mock):
+            self, post_mock, caplog):
         post_mock.side_effect = requests.exceptions.ConnectionError()
 
-        with pytest.raises(BadTopicCreation):
-            configure_topics()
+        configure_topics()
+
+        assert (
+            'postoffice_django.config',
+            logging.WARNING,
+            'Topic cannot be created'
+        ) in caplog.record_tuples
 
     def test_try_create_all_topics_when_some_topic_fails(
-            self, topic_already_exists):
+            self, topic_already_exists, caplog):
         responses.add(responses.POST,
                       self.POSTOFFICE_TOPIC_CREATION_URL,
                       status=400,
@@ -253,10 +268,14 @@ class TestConfigureTopics:
                       body="",
                       content_type='application/json')
 
-        with pytest.raises(BadTopicCreation) as bad_topic_creation_exception:
-            configure_topics()
+        configure_topics()
 
-        assert bad_topic_creation_exception.value.message == 'Can not create topic. Topic no created: [\'topic_to_be_created\']'  # noqa
+        assert (
+            'postoffice_django.config',
+            logging.WARNING,
+            'Topic cannot be created'
+        ) in caplog.record_tuples
+
         assert len(responses.calls) == 2
         assert json.loads(responses.calls[0].request.body) == {
             'name': 'topic_to_be_created',

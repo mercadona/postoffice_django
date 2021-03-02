@@ -36,7 +36,9 @@ def configure_topics() -> None:
             uncreated_topics.append(topic)
 
     if uncreated_topics:
-        raise BadTopicCreation(uncreated_topics)
+        logger.warning('Topic cannot be created',
+                       extra={'uncreated_topics': uncreated_topics})
+        return ConfigurationResponse(report_error=False)
 
 
 def _create_publishers(consumer: dict) -> ConfigurationResponse:
