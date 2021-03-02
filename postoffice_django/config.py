@@ -6,8 +6,6 @@ import requests
 from django.urls import reverse
 from requests.exceptions import ConnectionError, ConnectTimeout
 
-from postoffice_django.exceptions import BadPublisherCreation, BadTopicCreation
-
 from . import settings
 
 logger = logging.getLogger(__name__)
