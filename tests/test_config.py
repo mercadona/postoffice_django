@@ -80,7 +80,7 @@ class TestConfigurePublishers:
 
         assert (
             'postoffice_django.config',
-            logging.WARNING,
+            logging.ERROR,
             'Publisher cannot be created'
         ) in caplog.record_tuples
 
@@ -109,7 +109,7 @@ class TestConfigurePublishers:
 
         assert (
             'postoffice_django.config',
-            logging.WARNING,
+            logging.ERROR,
             'Publisher cannot be created'
         ) in caplog.record_tuples
 
@@ -122,7 +122,7 @@ class TestConfigurePublishers:
 
         assert (
             'postoffice_django.config',
-            logging.WARNING,
+            logging.ERROR,
             'Publisher cannot be created'
         ) in caplog.record_tuples
 
@@ -143,7 +143,7 @@ class TestConfigurePublishers:
 
         assert (
             'postoffice_django.config',
-            logging.WARNING,
+            logging.ERROR,
             'Publisher cannot be created'
         ) in caplog.record_tuples
 
@@ -225,7 +225,7 @@ class TestConfigureTopics:
 
         assert (
             'postoffice_django.config',
-            logging.WARNING,
+            logging.ERROR,
             'Topic cannot be created'
         ) in caplog.record_tuples
 
@@ -238,7 +238,7 @@ class TestConfigureTopics:
 
         assert (
             'postoffice_django.config',
-            logging.WARNING,
+            logging.ERROR,
             'Topic cannot be created'
         ) in caplog.record_tuples
 
@@ -251,7 +251,7 @@ class TestConfigureTopics:
 
         assert (
             'postoffice_django.config',
-            logging.WARNING,
+            logging.ERROR,
             'Topic cannot be created'
         ) in caplog.record_tuples
 
@@ -272,7 +272,7 @@ class TestConfigureTopics:
 
         assert (
             'postoffice_django.config',
-            logging.WARNING,
+            logging.ERROR,
             'Topic cannot be created'
         ) in caplog.record_tuples
 

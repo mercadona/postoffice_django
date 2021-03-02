@@ -23,8 +23,8 @@ def configure_publishers() -> None:
             uncreated_publishers.append(consumer)
 
     if uncreated_publishers:
-        logger.warning('Publisher cannot be created',
-                       extra={'uncreated_publishers': uncreated_publishers})
+        logger.error('Publisher cannot be created',
+                     extra={'uncreated_publishers': uncreated_publishers})
 
 
 def configure_topics() -> None:
@@ -35,8 +35,8 @@ def configure_topics() -> None:
             uncreated_topics.append(topic)
 
     if uncreated_topics:
-        logger.warning('Topic cannot be created',
-                       extra={'uncreated_topics': uncreated_topics})
+        logger.error('Topic cannot be created',
+                     extra={'uncreated_topics': uncreated_topics})
 
 
 def _create_publishers(consumer: dict) -> ConfigurationResponse:
