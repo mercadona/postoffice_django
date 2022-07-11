@@ -20,7 +20,7 @@ jobs:
   build:
     docker:
       - image: circleci/python:3.9
-      - image: circleci/postgres:9.6.5-alpine-ram
+      - image: circleci/postgres:12.10
         environment:
           POSTGRES_USER: postoffice_django
           POSTGRES_DB: postoffice_django
