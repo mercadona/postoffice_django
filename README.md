@@ -184,7 +184,7 @@ This will be handled on Postoffices and we'll actually receive two messages for 
 
 ### Implement
 
-1. `make install-test-requirements`
+1. `make install-test-dependencies`
 1. `make env-start`
 1. Write a test.
 1. `make test`
