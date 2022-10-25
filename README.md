@@ -70,7 +70,8 @@ POSTOFFICE = {
     'TIMEOUT': 0.3,
     'BULK_TIMEOUT': 5,
     'ORIGIN_HOST': 'example.com',
-    'TOPICS': ['topic_to_create', 'another_topic_to_create']
+    'TOPICS': ['topic_to_create', 'another_topic_to_create'],
+    'RECOVERY_ENABLED': True
 }
 ```
 - `URL`: Is the `url` where the Postoffice server is hosted.
@@ -93,6 +94,7 @@ POSTOFFICE = {
 
 - `TOPICS`: Topics to be created in order to send messages to `postoffice`
 
+- `RECOVERY_ENABLED`: Enables the recovery of failed messages on all new topics. If not specified, the default value is false.
 
 Finally add `postoffice` path in your django urls file:
 

@@ -12,6 +12,7 @@ logger = logging.getLogger(__name__)
 
 DEFAULT_TIMEOUT = 0.5
 DEFAULT_BULK_TIMEOUT = 5
+DEFAULT_RECOVERY_ENABLED = False
 
 
 def get_url() -> str:
@@ -63,3 +64,7 @@ def get_topics() -> List[str]:
     except KeyError:
         logger.warning('Topics config key is missing')
         return []
+
+
+def get_recovery_enabled() -> bool:
+    return settings.POSTOFFICE.get('RECOVERY_ENABLED', DEFAULT_RECOVERY_ENABLED)
