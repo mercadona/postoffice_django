@@ -193,6 +193,12 @@ class TestConfigureTopics:
             }
         })
 
+    @pytest.fixture
+    def settings_with_recovery_enabled(self, settings):
+        postoffice = dict(settings.POSTOFFICE)
+        postoffice['RECOVERY_ENABLED'] = True
+        settings.POSTOFFICE = postoffice
+
     def test_request_body_sent_to_create_topic(self):
         responses.add(responses.POST,
                       self.POSTOFFICE_TOPIC_CREATION_URL,
@@ -205,11 +211,36 @@ class TestConfigureTopics:
         assert len(responses.calls) == 2
         assert json.loads(responses.calls[0].request.body) == {
             'name': 'topic_to_be_created',
-            'origin_host': 'example.com/messages/'
+            'origin_host': 'example.com/messages/',
+            'recovery_enabled': False
         }
         assert json.loads(responses.calls[1].request.body) == {
             'name': 'another_topic_to_be_created',
-            'origin_host': 'example.com/messages/'
+            'origin_host': 'example.com/messages/',
+            'recovery_enabled': False
+        }
+
+    @pytest.mark.usefixtures('settings_with_recovery_enabled')
+    def test_recovery_enabled_sent_when_default_recovery_param_is_true(self):
+
+        responses.add(responses.POST,
+                      self.POSTOFFICE_TOPIC_CREATION_URL,
+                      status=201,
+                      body="",
+                      content_type='application/json')
+
+        configure_topics()
+
+        assert len(responses.calls) == 2
+        assert json.loads(responses.calls[0].request.body) == {
+            'name': 'topic_to_be_created',
+            'origin_host': 'example.com/messages/',
+            'recovery_enabled': True,
+        }
+        assert json.loads(responses.calls[1].request.body) == {
+            'name': 'another_topic_to_be_created',
+            'origin_host': 'example.com/messages/',
+            'recovery_enabled': True,
         }
 
     def test_do_not_raise_exception_when_can_not_create_topics(
@@ -278,11 +309,13 @@ class TestConfigureTopics:
         assert len(responses.calls) == 2
         assert json.loads(responses.calls[0].request.body) == {
             'name': 'topic_to_be_created',
-            'origin_host': 'example.com/messages/'
+            'origin_host': 'example.com/messages/',
+            'recovery_enabled': False
         }
         assert json.loads(responses.calls[1].request.body) == {
             'name': 'another_topic_to_be_created',
-            'origin_host': 'example.com/messages/'
+            'origin_host': 'example.com/messages/',
+            'recovery_enabled': False
         }
 
     def test_do_not_raise_exception_when_topic_already_exists(
