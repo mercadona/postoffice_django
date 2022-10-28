@@ -12,12 +12,22 @@ PACKAGE_NAME := postoffice-django
 
 env-start: ## Start project containers defined in docker-compose
 	docker-compose -p $(DOCKER_PROJECT_NAME) -f $(DOCKER_COMPOSE_FILE) up -d
+	docker-compose -p $(DOCKER_PROJECT_NAME) -f $(DOCKER_COMPOSE_FILE) exec -T app pip install --disable-pip-version-check -r /src/requirements/base.txt
 
 env-stop: ## Stop project containers defined in docker-compose
 	docker-compose -p $(DOCKER_PROJECT_NAME) -f $(DOCKER_COMPOSE_FILE) stop
 
+bash: ## Open a bash shell in project's main container
+	docker-compose -p $(DOCKER_PROJECT_NAME) -f $(DOCKER_COMPOSE_FILE) exec app bash
+
+env-install-test-dependencies: ## Install all test dependencies
+	docker-compose -p $(DOCKER_PROJECT_NAME) -f $(DOCKER_COMPOSE_FILE) exec -T app pip install --disable-pip-version-check -r /src/requirements/test.txt
+
 install-test-dependencies:  ## Install test dependencies locally. Make sure to have a virtualenv configured.
 	pip install -r requirements/test.txt
+
+env-test:
+	docker-compose -p $(DOCKER_PROJECT_NAME) -f $(DOCKER_COMPOSE_FILE) exec -T app python runtests.py
 
 test: ## Run the test suite. Make sure you run make env-start first.
 	python runtests.py
