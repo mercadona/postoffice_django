@@ -186,14 +186,12 @@ This will be handled on Postoffices and we'll actually receive two messages for 
 
 ### Implement
 
-1. `make install-test-dependencies`
+1. `make install-test-requirements`
 1. `make env-start`
 1. Write a test.
-1. `make test`*
+1. `make test`
 1. Implement up to the test are green.
 1. Repeat.
-
-_* You can use `make test` to run the test in your local or `make env-test` to run the test inside docker._
 
 ### Deploy
 
