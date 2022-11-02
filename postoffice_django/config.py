@@ -70,7 +70,11 @@ def _get_publisher_retry(consumer: dict) -> dict:
 
 def _create_topic(topic_name: str) -> ConfigurationResponse:
     url = f'{settings.get_url()}/api/topics/'
-    payload = {'name': topic_name, 'origin_host': _generate_origin_host()}
+    payload = {
+        'name': topic_name,
+        'origin_host': _generate_origin_host(),
+        'recovery_enabled': settings.get_recovery_enabled()
+    }
 
     return _execute_request(url, payload)
 

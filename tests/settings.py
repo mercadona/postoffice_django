@@ -1,3 +1,5 @@
+import os
+
 SECRET_KEY = 'psst'
 
 DEBUG = True
@@ -11,8 +13,8 @@ DATABASES = {
         'NAME': 'postoffice_django',
         'USER': 'postoffice_django',
         'PASSWORD': 'postoffice_django',
-        'HOST': 'localhost',
-        'PORT': '6542'
+        'HOST': os.environ.get('PG_HOST', 'localhost'),
+        'PORT': os.environ.get('PG_PORT', '6542')
     },
 }
 

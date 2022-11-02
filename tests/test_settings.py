@@ -11,7 +11,9 @@ from postoffice_django.settings import (
     get_timeout,
     get_topics,
     get_url,
-    get_bulk_timeout)
+    get_bulk_timeout,
+    get_recovery_enabled
+)
 
 
 class TestSettings:
@@ -72,3 +74,16 @@ class TestSettings:
             logging.WARNING,
             'Topics config key is missing'
         ) in caplog.record_tuples
+
+    @pytest.mark.parametrize('defined_value', [True, False])
+    def test_returns_recovery_enabled_value_when_is_defined(
+            self, defined_value, settings):
+        settings.POSTOFFICE['RECOVERY_ENABLED'] = defined_value
+
+        assert get_recovery_enabled() is defined_value
+
+    def test_returns_default_recovery_enabled_value_when_is_not_defined(
+            self, settings):
+        del(settings.POSTOFFICE['RECOVERY_ENABLED'])
+
+        assert get_recovery_enabled() is False
