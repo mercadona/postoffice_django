@@ -1,5 +1,16 @@
 version: '3'
 services:
+  app:
+    image: python:3.8
+    env_file:
+      - envfiles/local.env
+    stdin_open: true
+    tty: true
+    depends_on:
+      - db
+    volumes:
+      - '../:/src'
+    working_dir: '/src'
   db:
     image: postgres:12.1
     container_name: postoffice_django_db
