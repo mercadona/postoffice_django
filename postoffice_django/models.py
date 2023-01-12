@@ -4,7 +4,7 @@ from django.db.models import JSONField
 
 
 class PublishingError(models.Model):
-    id = models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')
+    # id = models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')
     topic = models.CharField(max_length=100)
     payload = JSONField(encoder=DjangoJSONEncoder)
     attributes = JSONField(null=True, encoder=DjangoJSONEncoder)

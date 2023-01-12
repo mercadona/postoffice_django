@@ -10,7 +10,7 @@ ROOT_URLCONF = 'postoffice_django.urls'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': os.environ.get('PG_DATABASE', 'postoffice_django_dev'),
+        'NAME': os.environ.get('PG_DATABASE', 'postoffice_django'),
         'USER': os.environ.get('PG_USER', 'postoffice'),
         'PASSWORD': os.environ.get('PG_PASSWORD', 'postoffice'),
         'HOST': os.environ.get('PG_HOST', 'localhost'),
