@@ -15,8 +15,8 @@ services:
     image: postgres:12.10
     container_name: postoffice_django_db
     environment:
-      - POSTGRES_PASSWORD=postoffice_django
-      - POSTGRES_USER=postoffice_django
+      - POSTGRES_PASSWORD=postoffice
+      - POSTGRES_USER=postoffice
       - POSTGRES_DB=postoffice_django
     ports:
       - "6542:5432"
