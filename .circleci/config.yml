@@ -25,7 +25,7 @@ jobs:
           PG_USER: postoffice
           PG_PASSWORD: postoffice
           PG_HOST: 127.0.0.1
-          PG_PORT: 654
+          PG_PORT: 6542
       - image: cimg/postgres:12.10
         environment:
           POSTGRES_USER: postoffice
