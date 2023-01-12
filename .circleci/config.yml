@@ -20,17 +20,11 @@ jobs:
   build:
     docker:
       - image: cimg/python:3.9
-        environment:
-          PG_DATABASE: postoffice_django_dev
-          PG_USER: postoffice
-          PG_PASSWORD: postoffice
-          PG_HOST: 127.0.0.1
-          PG_PORT: 6542
       - image: cimg/postgres:12.10
         environment:
-          POSTGRES_USER: postoffice
-          POSTGRES_DB: postoffice
-          POSTGRES_PASSWORD: postoffice
+          POSTGRES_USER: postoffice_django
+          POSTGRES_DB: postoffice_django
+          POSTGRES_PASSWORD: postoffice_django
         command: -p 6542
     steps:
       - checkout
