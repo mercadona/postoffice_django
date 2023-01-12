@@ -23,7 +23,7 @@ jobs:
       - image: cimg/postgres:12.10
         environment:
           POSTGRES_USER: postoffice_django
-          POSTGRES_DB: postoffice_django
+          POSTGRES_DB: test_postoffice_django
           POSTGRES_PASSWORD: postoffice_django
         command: -p 6542
     steps:
