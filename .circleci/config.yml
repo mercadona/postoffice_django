@@ -20,11 +20,11 @@ jobs:
   build:
     docker:
       - image: cimg/python:3.9
-      - image: cimg/postgres:12.10
+      - image: cimg/postgres:12.1
         environment:
-          POSTGRES_USER: postoffice
-          POSTGRES_PASSWORD: postoffice
+          POSTGRES_USER: postoffice_django
           POSTGRES_DB: postoffice_django
+          POSTGRES_PASSWORD: postoffice_django
         command: -p 6542
     steps:
       - checkout
