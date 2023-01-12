@@ -16,7 +16,7 @@ with open(path.join(current_directory, 'README.md'), encoding='utf-8') as file:
     long_description = file.read()
 
 
-VERSION = '0.12.0'
+VERSION = '0.12.1'
 
 
 class VerifyVersionCommand(install):
