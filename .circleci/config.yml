@@ -20,7 +20,7 @@ jobs:
   build:
     docker:
       - image: cimg/python:3.9
-      - image: cimg/postgres:12.1
+      - image: cimg/postgres:12.10
         environment:
           POSTGRES_USER: postoffice_django
           POSTGRES_DB: postoffice_django
