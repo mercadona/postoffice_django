@@ -16,7 +16,7 @@ with open(path.join(current_directory, 'README.md'), encoding='utf-8') as file:
     long_description = file.read()
 
 
-VERSION = '0.12.1'
+VERSION = '0.13.0'
 
 
 class VerifyVersionCommand(install):
@@ -45,16 +45,16 @@ setup(
     author_email='sofware.online@mercadona.es',
     classifiers=[
         'Environment :: Web Environment',
-        'Framework :: Django :: 2.0',
-        'Framework :: Django :: 2.1',
-        'Framework :: Django :: 2.2',
-        'Framework :: Django :: 3.0',
+        'Framework :: Django :: 4.2',
         'Intended Audience :: Developers',
         'License :: OSI Approved :: Apache Software License',
         'Natural Language :: English',
         'Programming Language :: Python :: 3',
         'Programming Language :: Python :: 3.7',
         'Programming Language :: Python :: 3.8',
+    ],
+    install_requires=[
+        "Django>=4.2.0",
     ],
     cmdclass={
         'verify': VerifyVersionCommand,

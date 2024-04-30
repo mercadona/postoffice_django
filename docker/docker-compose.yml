@@ -12,7 +12,7 @@ services:
       - '../:/src'
     working_dir: '/src'
   db:
-    image: postgres:12.10
+    image: postgres:13.4-bullseye
     container_name: postoffice_django_db
     environment:
       - POSTGRES_PASSWORD=postoffice_django
