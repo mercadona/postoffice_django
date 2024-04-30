@@ -45,16 +45,17 @@ setup(
     author_email='sofware.online@mercadona.es',
     classifiers=[
         'Environment :: Web Environment',
-        'Framework :: Django :: 2.0',
-        'Framework :: Django :: 2.1',
-        'Framework :: Django :: 2.2',
         'Framework :: Django :: 3.0',
+        'Framework :: Django :: 4.0',
         'Intended Audience :: Developers',
         'License :: OSI Approved :: Apache Software License',
         'Natural Language :: English',
         'Programming Language :: Python :: 3',
         'Programming Language :: Python :: 3.7',
         'Programming Language :: Python :: 3.8',
+    ],
+    install_requires=[
+        "Django>=4.2.0",
     ],
     cmdclass={
         'verify': VerifyVersionCommand,
