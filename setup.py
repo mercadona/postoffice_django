@@ -45,7 +45,7 @@ setup(
     author_email='sofware.online@mercadona.es',
     classifiers=[
         'Environment :: Web Environment',
-        'Framework :: Django :: 4.0',
+        'Framework :: Django :: 4.2',
         'Intended Audience :: Developers',
         'License :: OSI Approved :: Apache Software License',
         'Natural Language :: English',
